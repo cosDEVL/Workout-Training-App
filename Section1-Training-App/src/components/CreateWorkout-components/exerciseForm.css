@@ -1,0 +1,107 @@
+.modulo-backdrop {
+  background-color: #707070b6;
+  backdrop-filter: blur(2px);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.exercise-modulo {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 1rem;
+  position: absolute;
+  top: 5rem;
+  left: 50%;
+  transform: translate(-50%);
+  width: 40rem;
+  height: 40rem;
+
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.exercise-modulo .modulo-buttons * {
+  width: 100%;
+  font-size: 1rem;
+  text-transform: uppercase;
+  padding: 0.25rem;
+  margin-top: 1rem;
+}
+
+.exercise-modulo .modulo {
+  width: 100%;
+}
+
+.exercise-modulo .modulo .no-exercise-selected {
+  width: 100%;
+
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.exercise-modulo .modulo form.exercise-submit .exercise-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 3rem;
+  padding: 1rem;
+
+  .name {
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .submit {
+    font-size: 1.15rem;
+    padding: 0.25rem;
+    text-transform: uppercase;
+  }
+}
+
+.exercise-modulo .modulo form.exercise-submit button.add-set {
+  display: block;
+  width: 100%;
+  padding: 0.25rem;
+  font-size: 1rem;
+}
+
+.exercise-modulo .modulo form.exercise-submit .sets-list {
+  padding: 0.5rem;
+
+  margin: 0.5rem;
+
+  overflow-y: scroll;
+  max-height: 25rem;
+
+  .set {
+    border-bottom: 1px solid grey;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  div label {
+    margin-right: 0.25rem;
+    width: 100%;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  div input {
+    padding: 0.15rem;
+    font-size: 1rem;
+  }
+}

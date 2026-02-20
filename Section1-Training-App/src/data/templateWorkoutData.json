@@ -1,0 +1,209 @@
+{
+  "ESERCIZI": [
+    {
+      "id": "0",
+      "name": "Bench Press",
+      "description": "panca buona per il petto",
+      "groups": [
+        "Chest",
+        "Triceps"
+      ]
+    },
+    {
+      "id": "1",
+      "name": "Deadlift",
+      "description": "Stacco per la schiena",
+      "groups": [
+        "Lats",
+        "Lombar",
+        "Hamstrings",
+        "Glutes"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Squat",
+      "description": "squat per le gambe",
+      "groups": [
+        "Quadriceps",
+        "Hamstrings",
+        "Glutes"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Lateral raise",
+      "description": "spalle per le gambe",
+      "groups": [
+        "Shoulders"
+      ]
+    }
+  ],
+  "WORKOUT-LIST": [
+    {
+      "id": "bde2",
+      "workoutName": "pollo",
+      "exerciseList": [
+        {
+          "id": "1ec061ab-c9df-40e6-9615-6f7c864d14c8",
+          "name": "Bench Press",
+          "sets": [
+            {
+              "setId": "7ade722e-16f8-45ce-a09e-ac4ac448c209",
+              "reps": "1231",
+              "weight": "222"
+            },
+            {
+              "setId": "86eb82e4-4bcf-4429-b90a-174299fdcb35",
+              "reps": "22",
+              "weight": "222"
+            }
+          ]
+        },
+        {
+          "id": "31df3c85-e060-48c5-bc1e-ab3c2dce439e",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "9e1b9447-df28-4835-ba9a-af9fc4e4a6b7",
+              "reps": "123",
+              "weight": "123"
+            }
+          ]
+        }
+      ],
+      "dateCreation": 1771344495929
+    },
+    {
+      "id": "8d29",
+      "workoutName": "pollo",
+      "exerciseList": [
+        {
+          "id": "1ec061ab-c9df-40e6-9615-6f7c864d14c8",
+          "name": "Bench Press",
+          "sets": [
+            {
+              "setId": "7ade722e-16f8-45ce-a09e-ac4ac448c209",
+              "reps": "1231",
+              "weight": "222"
+            },
+            {
+              "setId": "86eb82e4-4bcf-4429-b90a-174299fdcb35",
+              "reps": "22",
+              "weight": "222"
+            }
+          ]
+        },
+        {
+          "id": "31df3c85-e060-48c5-bc1e-ab3c2dce439e",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "9e1b9447-df28-4835-ba9a-af9fc4e4a6b7",
+              "reps": "123",
+              "weight": "123"
+            }
+          ]
+        }
+      ],
+      "dateCreation": 1771344534039
+    },
+    {
+      "id": "1a4f",
+      "workoutName": "pollo",
+      "exerciseList": [
+        {
+          "id": "1ec061ab-c9df-40e6-9615-6f7c864d14c8",
+          "name": "Bench Press",
+          "sets": [
+            {
+              "setId": "7ade722e-16f8-45ce-a09e-ac4ac448c209",
+              "reps": "1231",
+              "weight": "222"
+            },
+            {
+              "setId": "86eb82e4-4bcf-4429-b90a-174299fdcb35",
+              "reps": "22",
+              "weight": "222"
+            }
+          ]
+        },
+        {
+          "id": "31df3c85-e060-48c5-bc1e-ab3c2dce439e",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "9e1b9447-df28-4835-ba9a-af9fc4e4a6b7",
+              "reps": "123",
+              "weight": "123"
+            }
+          ]
+        }
+      ],
+      "dateCreation": 1771344616722
+    },
+    {
+      "id": "3718",
+      "workoutName": "gino il pecorino",
+      "exerciseList": [
+        {
+          "id": "1ec061ab-c9df-40e6-9615-6f7c864d14c8",
+          "name": "Bench Press",
+          "sets": [
+            {
+              "setId": "7ade722e-16f8-45ce-a09e-ac4ac448c209",
+              "reps": "1231",
+              "weight": "222"
+            },
+            {
+              "setId": "86eb82e4-4bcf-4429-b90a-174299fdcb35",
+              "reps": "22",
+              "weight": "222"
+            }
+          ]
+        },
+        {
+          "id": "31df3c85-e060-48c5-bc1e-ab3c2dce439e",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "9e1b9447-df28-4835-ba9a-af9fc4e4a6b7",
+              "reps": "123",
+              "weight": "123"
+            }
+          ]
+        },
+        {
+          "id": "9f3ddca3-4674-40e1-aadb-b6cec41739e4",
+          "name": "Triceps Dip",
+          "sets": [
+            {
+              "setId": "3d5d8942-10d2-4ba3-be77-fea4a154549e",
+              "reps": "12",
+              "weight": ""
+            }
+          ]
+        }
+      ],
+      "dateCreation": 1771344652469
+    },
+    {
+      "id": "5e4f",
+      "workoutName": "gino il pecorino",
+      "exerciseList": [
+        {
+          "id": "061126ab-f3d7-4fd4-b56e-d9df0684291d",
+          "name": "Bridge - Mountain Climber ",
+          "sets": [
+            {
+              "setId": "864f17de-3787-426e-9aea-777165335391",
+              "reps": "1",
+              "weight": ""
+            }
+          ]
+        }
+      ],
+      "dateCreation": 1771344787570
+    }
+  ]
+}

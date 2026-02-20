@@ -1,0 +1,30 @@
+.homepage {
+  width: 100%;
+  overflow: hidden;
+}
+
+.homepage header {
+  width: 15rem;
+  text-align: center;
+  margin: 3rem auto;
+}
+
+.homepage .nav-buttons {
+  width: 30rem;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.homepage .nav-buttons .link {
+  background-color: black;
+  width: 12rem;
+  text-align: center;
+}
+
+.homepage .nav-buttons .link a {
+  display: block;
+  color: white;
+  padding: 1rem;
+}

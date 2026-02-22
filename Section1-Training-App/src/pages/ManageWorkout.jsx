@@ -4,14 +4,29 @@ import DisplayArea from "../components/DisplayArea";
 import ExerciseForm from "../components/CreateWorkout-components/ExerciseForm";
 import Exercise from "../components/CreateWorkout-components/Exercise";
 
-import "./createWorkout.css";
+import "./manageWorkout.css";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
+import { useLocation, useNavigate } from "react-router";
 
-export default function CreateWorkout() {
-  const [openForm, setOpenForm] = useState(false);
-  const [workoutName, setWorkoutName] = useState("");
-  const [exercises, setExercises] = useState([]);
+export default function ManageWorkout({ editMode = false }) {
+  let navigate = useNavigate();
+  const location = useLocation();
+  const editWorkout = location.state?.workout;
+  let exerciseList;
+
+  if (editWorkout) {
+    exerciseList = editWorkout.exerciseList.map((exercise) => {
+      return { ...exercise };
+    });
+  }
+
+  const [openAddForm, setOpenAddForm] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [workoutName, setWorkoutName] = useState(
+    editWorkout ? editWorkout.workoutName : "",
+  );
+  const [exercises, setExercises] = useState(exerciseList ? exerciseList : []);
 
   function handleAddExercise(newExercise) {
     setExercises((prev) => [...prev, newExercise]);
@@ -46,29 +61,45 @@ export default function CreateWorkout() {
       const workout = {
         workoutName,
         exerciseList: exercises,
-        dateCreation: Date.now(),
+        dateCreation: new Date().toISOString(),
       };
 
-      const response = await fetch(`http://localhost:3000/WORKOUT-LIST`, {
-        method: "POST",
+      // console.log(workout);
+      let url = `http://localhost:3000/WORKOUT-LIST`;
+
+      if (editMode) url = url.concat(`/${editWorkout.id}`);
+
+      const response = await fetch(url, {
+        method: editMode ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(workout),
       });
 
-      console.log(response);
-
       setWorkoutName("");
       setExercises([]);
+
+      if (editMode) {
+        navigate(`/workout/${editWorkout.id}`, {
+          state: {
+            workout: {
+              id: editWorkout.id,
+              workoutName,
+              exerciseList: exercises,
+              dateCreation: workout.dateCreation,
+            },
+          },
+        });
+      } else {
+        navigate("/workout-list");
+      }
     } catch (error) {
       console.log(error);
     }
 
     return;
   }
-
-  console.log(exercises);
 
   return (
     <>
@@ -90,12 +121,12 @@ export default function CreateWorkout() {
           </form>
           <div className="exercise-list">
             <div className="add-exercise">
-              <button onClick={() => setOpenForm(true)}>Add Exercise</button>
+              <button onClick={() => setOpenAddForm(true)}>Add Exercise</button>
             </div>
-            {openForm && (
+            {openAddForm && (
               <ExerciseForm
                 handleExercise={handleAddExercise}
-                closeForm={() => setOpenForm(false)}
+                closeForm={() => setOpenAddForm(false)}
               />
             )}
             <DragDropProvider
@@ -106,13 +137,34 @@ export default function CreateWorkout() {
               <div className="added-exercise">
                 {exercises.map((exercise, i) => (
                   <Exercise
-                    exercise={exercise}
-                    handleDelete={handleDeleteExercise}
-                    handleEdit={handleEditExercise}
                     key={exercise.id}
+                    editMode={true}
+                    exercise={exercise}
                     id={exercise.id}
                     index={i}
-                  />
+                  >
+                    <div className="buttons">
+                      <button
+                        className="edit"
+                        onClick={() => setOpenEditForm(true)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete"
+                        onClick={() => handleDeleteExercise(exercise.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    {openEditForm && (
+                      <ExerciseForm
+                        handleExercise={handleEditExercise}
+                        editExercise={exercise}
+                        closeForm={() => setOpenEditForm(false)}
+                      />
+                    )}
+                  </Exercise>
                 ))}
               </div>
             </DragDropProvider>

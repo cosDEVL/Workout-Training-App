@@ -9,6 +9,10 @@ html {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 body {
   width: 100dvw;
   height: 100dvh;

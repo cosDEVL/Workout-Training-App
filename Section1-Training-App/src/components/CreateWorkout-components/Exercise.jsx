@@ -7,11 +7,11 @@ import { useSortable } from "@dnd-kit/react/sortable";
 import "./exercise.css";
 
 export default function Exercise({
+  editMode = false,
   exercise,
-  handleDelete,
-  handleEdit,
-  id,
-  index,
+  id = undefined,
+  index = undefined,
+  children,
 }) {
   const { ref } = useSortable({ id, index });
 
@@ -20,14 +20,8 @@ export default function Exercise({
   const reps = exercise.sets.map((set) => set.reps).join(" - ");
   const weight = exercise.sets.map((set) => `${set.weight}kg`).join(" - ");
 
-  console.log(exercise);
-
-  function handleDragEnd(e) {
-    console.log(e);
-  }
-
   return (
-    <div className="exercise" ref={ref} onDragEnd={handleDragEnd}>
+    <div className="exercise" ref={editMode ? ref : null}>
       <div className="exercise-info">
         <span className="name">{exercise.name}</span>
         <p className="num-sets">{exercise.sets.length} Sets:</p>
@@ -39,21 +33,7 @@ export default function Exercise({
           ))} */}
         </div>
       </div>
-      <div className="buttons">
-        <button className="edit" onClick={() => setEditForm(true)}>
-          Edit
-        </button>
-        <button className="delete" onClick={() => handleDelete(exercise.id)}>
-          Delete
-        </button>
-      </div>
-      {editForm && (
-        <ExerciseForm
-          handleExercise={handleEdit}
-          editExercise={exercise}
-          closeForm={() => setEditForm(false)}
-        />
-      )}
+      {children}
     </div>
   );
 }

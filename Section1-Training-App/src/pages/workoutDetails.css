@@ -1,0 +1,39 @@
+.workout-details {
+  margin: 1rem;
+
+  .workout-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 3rem;
+    p.name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    div.buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      button {
+        padding: 0.5rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .workout-exercises {
+    margin-top: 1rem;
+
+    p.num-exercises {
+      margin-bottom: 1rem;
+      font-size: 1.15rem;
+      span {
+        font-weight: 600;
+      }
+    }
+  }
+}

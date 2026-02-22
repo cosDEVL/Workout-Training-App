@@ -1,0 +1,38 @@
+.workout-list {
+  margin: 1rem;
+
+  h1.page-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .list-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    * {
+      font-size: 1.25rem;
+    }
+
+    p span {
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    button.create-workout-btn {
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .workouts-created {
+    margin: 0 auto;
+    width: 38.5rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+}

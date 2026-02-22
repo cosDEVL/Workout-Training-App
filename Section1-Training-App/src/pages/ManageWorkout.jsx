@@ -16,7 +16,7 @@ export default function ManageWorkout({ editMode = false }) {
   // const editWorkout = location.state?.workout;
 
   const [editWorkout, setEditWorkout] = useState(state?.workout || null);
-  const [isLoading, setIsLoading] = useState(editWorkout ? false : true);
+
   const exerciseList = editWorkout?.exerciseList.map((exercise) => {
     return { ...exercise };
   });
@@ -43,6 +43,7 @@ export default function ManageWorkout({ editMode = false }) {
           );
           const data = await response.json();
 
+          setEditWorkout(data);
           setWorkoutName(data.workoutName);
           setExercises(
             data.exerciseList.map((exercise) => {

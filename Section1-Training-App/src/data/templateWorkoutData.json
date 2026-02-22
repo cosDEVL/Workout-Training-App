@@ -45,18 +45,63 @@
       "workoutName": "mandorlaaa",
       "exerciseList": [
         {
+          "id": "433e8b72-3648-4310-95e5-ca14534e09c7",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "0ee39508-f3e2-4922-8616-4a6b718abef1",
+              "reps": "1233",
+              "weight": ""
+            }
+          ]
+        },
+        {
           "id": "b0648643-f8f1-472c-ba39-efd9ce44e74b",
           "name": "Sliding Floor Pulldown on Towel",
           "sets": [
             {
               "setId": "8aaa2fcb-b9e6-4c99-8875-4e1d55e69232",
-              "reps": "1",
+              "reps": "12",
               "weight": ""
             }
           ]
         }
       ],
-      "dateCreation": "2026-02-22T16:29:15.008Z"
+      "dateCreation": "2026-02-22T17:11:47.496Z"
+    },
+    {
+      "id": "26ed",
+      "workoutName": "mandorla",
+      "exerciseList": [
+        {
+          "id": "b7b60220-3c41-49a1-8ba2-108b03cebef6",
+          "name": "Triceps Dip",
+          "sets": [
+            {
+              "setId": "5cdb2cae-bca7-4c2f-a912-42385e03641f",
+              "reps": "123",
+              "weight": "123"
+            },
+            {
+              "setId": "779b0add-a680-4b40-8e91-667ac01dd5da",
+              "reps": "333",
+              "weight": "123"
+            }
+          ]
+        },
+        {
+          "id": "df8e6db3-9b14-44f7-b987-deb778d1648f",
+          "name": "Dumbbell Incline One Arm Hammer Press",
+          "sets": [
+            {
+              "setId": "83d67bc9-6dde-40d8-9736-3484c9c29445",
+              "reps": "1331",
+              "weight": ""
+            }
+          ]
+        }
+      ],
+      "dateCreation": "2026-02-22T17:12:14.819Z"
     }
   ]
 }

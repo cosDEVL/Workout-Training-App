@@ -42,7 +42,7 @@
   "WORKOUT-LIST": [
     {
       "id": "d3d6",
-      "workoutName": "pollo",
+      "workoutName": "mamma",
       "exerciseList": [
         {
           "id": "433e8b72-3648-4310-95e5-ca14534e09c7",
@@ -67,7 +67,7 @@
           ]
         }
       ],
-      "dateCreation": "2026-02-22T17:46:17.619Z"
+      "dateCreation": "2026-02-22T17:48:18.056Z"
     },
     {
       "id": "26ed",
@@ -102,6 +102,35 @@
         }
       ],
       "dateCreation": "2026-02-22T17:12:14.819Z"
+    },
+    {
+      "id": "3ba6",
+      "workoutName": "vino",
+      "exerciseList": [
+        {
+          "id": "756bd623-f795-4c95-bbbc-57a22631d687",
+          "name": "Side Lunge",
+          "sets": [
+            {
+              "setId": "6cf03e5f-44eb-49fb-9314-8e58c75df160",
+              "reps": "1",
+              "weight": ""
+            }
+          ]
+        },
+        {
+          "id": "49b57494-797e-4037-86f5-b3e298803ef0",
+          "name": "Chin-ups",
+          "sets": [
+            {
+              "setId": "8747e618-1ce5-4980-bba0-352f12b9d61b",
+              "reps": "1",
+              "weight": ""
+            }
+          ]
+        }
+      ],
+      "dateCreation": "2026-02-22T17:49:27.934Z"
     }
   ]
 }

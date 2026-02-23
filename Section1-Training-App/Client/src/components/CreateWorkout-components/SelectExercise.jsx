@@ -69,6 +69,8 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
 
         const res = await fetch(url.toString(), { signal: controller.signal });
 
+        console.log(url);
+
         const results = await res.json();
         setExerciseList(results.data);
       } catch (error) {

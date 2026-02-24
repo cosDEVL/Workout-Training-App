@@ -1,56 +1,50 @@
-exports.workoutList = (req, res) => {
+const catchAsync = require("../utils/catchAsync");
+const Workout = require("../model/workoutSchema");
+
+exports.workoutList = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});
 
-exports.addNewWorkout = (req, res) => {
-  console.log(req.body);
-
+exports.addNewWorkout = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});
 
-exports.deleteAllWorkouts = (req, res) => {
+exports.deleteAllWorkouts = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});
 
-exports.workoutDetails = (req, res) => {
-  console.log(req.params.id);
-
+exports.workoutDetails = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});
 
-exports.updateWorkout = (req, res) => {
-  console.log(req.params.id);
-  console.log(req.body);
-
+exports.updateWorkout = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});
 
-exports.deleteWorkout = (req, res) => {
-  console.log(req.params.id);
-
+exports.deleteWorkout = catchAsync(async (req, res) => {
   res.status(501).json({
     status: "Warning",
     request: `${req.method} ${req.baseUrl}`,
     message: "Route not defined yet",
   });
-};
+});

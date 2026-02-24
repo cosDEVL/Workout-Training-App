@@ -1,48 +1,71 @@
-exports.exerciseList = (req, res) => {
-  res.status(501).json({
-    status: "Warning",
+const catchAsync = require("../utils/catchAsync");
+const Exercise = require("../model/exerciseSchema");
+const AppError = require("../middleware/AppError");
+
+exports.exerciseList = catchAsync(async (req, res) => {
+  const { query } = req;
+  const filter = {};
+
+  if (query.name) {
+    filter.name = { $regex: query.name, $options: "i" };
+  }
+  if (query.bodyParts) filter.bodyParts = { $in: query.bodyParts.split(",") };
+  if (query.equipments)
+    filter.equipments = { $in: query.equipments.split(",") };
+  if (query.exerciseType)
+    filter.exerciseType = { $in: query.exerciseType.split(",") };
+
+  const data = await Exercise.find(filter, { name: 1, exerciseType: 1 });
+
+  res.status(200).json({
+    status: "ok",
     request: `${req.method} ${req.baseUrl}`,
-    message: "Route not defined yet",
+    results: data.length,
+    message: "Data fetched successfully",
+    data: data,
   });
-};
+});
 
-exports.addNewExercise = (req, res) => {
-  console.log(req.body);
+exports.addNewExercise = catchAsync(async (req, res) => {
+  await Exercise.create(req.body);
 
-  res.status(501).json({
-    status: "Warning",
+  res.status(200).json({
+    status: "ok",
     request: `${req.method} ${req.baseUrl}`,
-    message: "Route not defined yet",
+    message: "Data created successfully",
+    data: req.body,
   });
-};
+});
 
-exports.exerciseDetails = (req, res) => {
-  console.log(req.params.id);
+exports.exerciseDetails = catchAsync(async (req, res) => {
+  const data = await Exercise.find({ exerciseId: req.params.id });
 
-  res.status(501).json({
-    status: "Warning",
+  if (data.length === 0) throw new AppError(404, "Exercise not found");
+
+  res.status(200).json({
+    status: "ok",
     request: `${req.method} ${req.baseUrl}`,
-    message: "Route not defined yet",
+    message: "Data fetched successfully",
+    data,
   });
-};
+});
 
-exports.updateExercise = (req, res) => {
-  console.log(req.params.id);
-  console.log(req.body);
+exports.updateExercise = catchAsync(async (req, res) => {
+  await Exercise.findOneAndUpdate({ exerciseId: req.params.id }, req.body);
 
-  res.status(501).json({
-    status: "Warning",
+  res.status(200).json({
+    status: "ok",
     request: `${req.method} ${req.baseUrl}`,
-    message: "Route not defined yet",
+    message: "Data updated successfully",
   });
-};
+});
 
-exports.deleteExercise = (req, res) => {
-  console.log(req.params.id);
+exports.deleteExercise = catchAsync(async (req, res) => {
+  await Exercise.findOneAndDelete({ exerciseId: req.params.id });
 
-  res.status(501).json({
-    status: "Warning",
+  res.status(200).json({
+    status: "ok",
     request: `${req.method} ${req.baseUrl}`,
-    message: "Route not defined yet",
+    message: "Data deleted successfully",
   });
-};
+});

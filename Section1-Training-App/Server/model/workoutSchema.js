@@ -8,13 +8,10 @@ const workoutSchema = mongoose.Schema(
     },
     exerciseList: [
       {
-        exerciseId: {
-          type: String,
+        exerciseRef: {
+          type: mongoose.Schema.Types.ObjectId,
           required: true,
-        },
-        name: {
-          type: String,
-          required: true,
+          ref: "Exercise",
         },
         sets: [
           {

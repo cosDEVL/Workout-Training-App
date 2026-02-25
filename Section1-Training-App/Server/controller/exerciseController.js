@@ -15,7 +15,7 @@ exports.exerciseList = catchAsync(async (req, res) => {
   if (query.exerciseType)
     filter.exerciseType = { $in: query.exerciseType.split(",") };
 
-  const data = await Exercise.find(filter, { name: 1, exerciseType: 1 });
+  const data = await Exercise.find({ ...filter, isActive: true });
 
   res.status(200).json({
     status: "ok",
@@ -61,7 +61,10 @@ exports.updateExercise = catchAsync(async (req, res) => {
 });
 
 exports.deleteExercise = catchAsync(async (req, res) => {
-  await Exercise.findOneAndDelete({ exerciseId: req.params.id });
+  await Exercise.findOneAndUpdate(
+    { exerciseId: req.params.id },
+    { isActive: false },
+  );
 
   res.status(200).json({
     status: "ok",

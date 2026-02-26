@@ -9,29 +9,32 @@ export default function ExerciseForm({
   closeForm,
 }) {
   const [menuStatus, setMenuStatus] = useState(!editExercise);
-  const [name, setName] = useState(editExercise ? editExercise.name : "");
+
+  const [exerciseRef, setExerciseRef] = useState(
+    editExercise ? editExercise.exerciseRef : null,
+  );
   const [sets, setSets] = useState(
     editExercise
       ? editExercise.sets
-      : [{ setId: crypto.randomUUID(), reps: "", weight: "" }],
+      : [{ _id: crypto.randomUUID(), reps: "", weight: "" }],
   );
 
-  function handleSelect(exerciseName) {
-    setName(exerciseName);
+  function handleSelect(exercise) {
+    setExerciseRef(exercise);
     setMenuStatus(false);
   }
 
   function handleAddSet() {
     setSets((prev) => [
       ...prev,
-      { setId: crypto.randomUUID(), reps: "", weight: "" },
+      { _id: crypto.randomUUID(), reps: "", weight: "" },
     ]);
   }
 
   function handleChange(focus, index, value) {
     const newSets = sets.map((set, i) => {
       if (i === index) {
-        return { ...set, [focus]: value };
+        return { ...set, [focus]: Number(value) };
       } else return set;
     });
 
@@ -39,7 +42,7 @@ export default function ExerciseForm({
   }
 
   function handleRemoveSet(idSetToRemove) {
-    const newSets = sets.filter((set) => set.setId !== idSetToRemove);
+    const newSets = sets.filter((set) => set._id !== idSetToRemove);
     setSets(newSets);
   }
 
@@ -47,17 +50,28 @@ export default function ExerciseForm({
     e.preventDefault();
 
     const exerciseData = {
-      id: editExercise ? editExercise.id : crypto.randomUUID(),
-      name,
+      _id: editExercise ? editExercise._id : crypto.randomUUID(),
+      exerciseRef: editExercise ? editExercise.exerciseRef : exerciseRef,
       sets,
     };
 
-    handleExercise(exerciseData);
+    console.log(exerciseData);
+
+    handleExercise(
+      editExercise
+        ? exerciseData
+        : {
+            exerciseRef: exerciseData.exerciseRef,
+            sets: exerciseData.sets.map((set) => {
+              return { reps: set.reps, weight: set.weight };
+            }),
+          },
+    );
     closeForm();
 
     if (!editExercise) {
-      setName("");
-      setSets([{ setId: crypto.randomUUID(), reps: "", weight: "" }]);
+      setExerciseRef(null);
+      setSets([{ _id: crypto.randomUUID(), reps: "", weight: "" }]);
     }
   }
 
@@ -72,14 +86,14 @@ export default function ExerciseForm({
             />
           </div>
           {!menuStatus &&
-            (!name ? (
+            (!exerciseRef ? (
               <p className="no-exercise-selected">
                 Open the Exercise List and select one
               </p>
             ) : (
               <form className="exercise-submit" onSubmit={handleSubmit}>
                 <div className="exercise-selected">
-                  <p className="name">{name}</p>
+                  <p className="name">{exerciseRef.name}</p>
                   <button className="submit" type="submit">
                     {!editExercise ? `Add Exercise` : `Edit Exercise`}
                   </button>
@@ -93,13 +107,13 @@ export default function ExerciseForm({
                 </button>
                 <div className="sets-list">
                   {sets.map((set, i) => (
-                    <div className="set" key={set.setId}>
+                    <div className="set" key={set._id}>
                       <div>
-                        <label htmlFor={`reps-${set.setId}`}>Reps</label>
+                        <label htmlFor={`reps-${set._id}`}>Reps</label>
                         <input
                           type="number"
                           name="reps"
-                          id={`reps-${set.setId}`}
+                          id={`reps-${set._id}`}
                           value={set.reps}
                           onChange={(e) =>
                             handleChange("reps", i, e.target.value)
@@ -108,11 +122,11 @@ export default function ExerciseForm({
                         />
                       </div>
                       <div>
-                        <label htmlFor={`weight-${set.setId}`}>Weight</label>
+                        <label htmlFor={`weight-${set._id}`}>Weight</label>
                         <input
                           type="number"
                           name="weight"
-                          id={`weight-${set.setId}`}
+                          id={`weight-${set._id}`}
                           value={set.weight}
                           onChange={(e) =>
                             handleChange("weight", i, e.target.value)
@@ -122,7 +136,7 @@ export default function ExerciseForm({
                       <button
                         type="button"
                         className="remove-set"
-                        onClick={() => handleRemoveSet(set.setId)}
+                        onClick={() => handleRemoveSet(set._id)}
                       >
                         Remove
                       </button>
@@ -139,7 +153,7 @@ export default function ExerciseForm({
               className="set-exercise"
               onClick={() => setMenuStatus(true)}
             >
-              {!name ? `Open Exercise List` : `Change Exercise`}
+              {!exerciseRef ? `Open Exercise List` : `Change Exercise`}
             </button>
             <button className="close-form" onClick={closeForm}>
               close

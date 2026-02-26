@@ -7,6 +7,7 @@ import "./workoutList.css";
 import WorkoutTab from "../components/WorkoutList-Components/WorkoutTab";
 
 export default function WorkoutList() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
 
   const [workoutList, setWorkoutList] = useState([]);
@@ -14,9 +15,10 @@ export default function WorkoutList() {
   useEffect(() => {
     async function fetchWorkout() {
       try {
-        const response = await fetch(`http://localhost:3000/WORKOUT-LIST`);
-        const data = await response.json();
-        setWorkoutList(data);
+        const response = await fetch(`${apiUrl}/api/v1/workouts`);
+        const json = await response.json();
+
+        setWorkoutList(json.data);
       } catch (error) {
         console.log(error);
       }
@@ -62,7 +64,7 @@ export default function WorkoutList() {
               <WorkoutTab
                 workout={workout}
                 handleDelete={handleDeleteWorkout}
-                key={workout.id}
+                key={workout._id}
               />
             ))}
           </div>

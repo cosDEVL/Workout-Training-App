@@ -23,7 +23,7 @@ export default function Exercise({
   return (
     <div className="exercise" ref={editMode ? ref : null}>
       <div className="exercise-info">
-        <span className="name">{exercise.name}</span>
+        <span className="name">{exercise.exerciseRef.name}</span>
         <p className="num-sets">{exercise.sets.length} Sets:</p>
         <div className="exercise-sets">
           <p className="reps">{reps}</p>

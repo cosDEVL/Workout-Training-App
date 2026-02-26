@@ -10,8 +10,10 @@ import { move } from "@dnd-kit/helpers";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 export default function ManageWorkout({ editMode = false }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
   const { workoutID } = useParams();
+
   const { state } = useLocation();
   // const editWorkout = location.state?.workout;
 
@@ -21,46 +23,40 @@ export default function ManageWorkout({ editMode = false }) {
     return { ...exercise };
   });
 
-  console.log(exerciseList);
-
   const [openAddForm, setOpenAddForm] = useState(false);
   // const [openEditForm, setOpenEditForm] = useState(false);
   const [editingExercise, setEditingExercise] = useState(null);
   const [workoutName, setWorkoutName] = useState(
     editWorkout ? editWorkout.workoutName : "",
   );
-  const [exercises, setExercises] = useState(exerciseList ? exerciseList : []);
 
-  console.log(editWorkout);
+  const [exercises, setExercises] = useState(exerciseList ? exerciseList : []);
 
   useEffect(() => {
     if (editMode && !editWorkout) {
       async function fetchEditWorkout() {
-        console.log("first");
         try {
           const response = await fetch(
-            `http://localhost:3000/WORKOUT-LIST/${workoutID}`,
+            `${apiUrl}/api/v1/workouts/${workoutID}`,
           );
-          const data = await response.json();
+          const json = await response.json();
 
-          setEditWorkout(data);
-          setWorkoutName(data.workoutName);
+          setEditWorkout(json.data[0]);
+          setWorkoutName(json.data[0].workoutName);
           setExercises(
-            data.exerciseList.map((exercise) => {
+            json.data[0].exerciseList.map((exercise) => {
               return { ...exercise };
             }),
           );
         } catch (error) {
           console.log(error);
           navigate("/workout-list");
-        } finally {
-          setIsLoading(false);
         }
       }
 
       fetchEditWorkout();
     }
-  }, [editMode, editWorkout, workoutID, navigate]);
+  }, [editMode, editWorkout, workoutID, navigate, apiUrl]);
 
   function handleAddExercise(newExercise) {
     setExercises((prev) => [...prev, newExercise]);
@@ -68,14 +64,16 @@ export default function ManageWorkout({ editMode = false }) {
 
   function handleDeleteExercise(exerciseId) {
     setExercises((prev) =>
-      prev.filter((exercise) => exercise.id !== exerciseId),
+      prev.filter((exercise) => exercise._id !== exerciseId),
     );
   }
+  console.log(exercises);
 
   function handleEditExercise(editedExercise) {
     setExercises((prev) =>
       prev.map((exercise) => {
-        if (exercise.id === editedExercise.id) {
+        console.log(editedExercise, exercise);
+        if (exercise._id === editedExercise._id) {
           return editedExercise;
         }
         return exercise;
@@ -95,13 +93,13 @@ export default function ManageWorkout({ editMode = false }) {
       const workout = {
         workoutName,
         exerciseList: exercises,
-        dateCreation: new Date().toISOString(),
       };
 
       // console.log(workout);
-      let url = `http://localhost:3000/WORKOUT-LIST`;
+      let url = `${apiUrl}/api/v1/workouts`;
 
-      if (editMode) url = url.concat(`/${editWorkout.id}`);
+      console.log(workout);
+      if (editMode) url = url.concat(`/${editWorkout._id}`);
 
       const response = await fetch(url, {
         method: editMode ? "PATCH" : "POST",
@@ -111,17 +109,18 @@ export default function ManageWorkout({ editMode = false }) {
         body: JSON.stringify(workout),
       });
 
+      console.log(response);
+
       setWorkoutName("");
       setExercises([]);
 
       if (editMode) {
-        navigate(`/workout/${editWorkout.id}`, {
+        navigate(`/workout/${editWorkout._id}`, {
           state: {
             workout: {
-              id: editWorkout.id,
+              _id: editWorkout._id,
               workoutName,
               exerciseList: exercises,
-              dateCreation: workout.dateCreation,
             },
           },
         });
@@ -171,27 +170,27 @@ export default function ManageWorkout({ editMode = false }) {
               <div className="added-exercise">
                 {exercises.map((exercise, i) => (
                   <Exercise
-                    key={exercise.id}
+                    key={exercises.length + i}
                     editMode={true}
                     exercise={exercise}
-                    id={exercise.id}
+                    id={exercise._id}
                     index={i}
                   >
                     <div className="buttons">
                       <button
                         className="edit"
-                        onClick={() => setEditingExercise(exercise.id)}
+                        onClick={() => setEditingExercise(exercise._id)}
                       >
                         Edit
                       </button>
                       <button
                         className="delete"
-                        onClick={() => handleDeleteExercise(exercise.id)}
+                        onClick={() => handleDeleteExercise(exercise._id)}
                       >
                         Delete
                       </button>
                     </div>
-                    {editingExercise === exercise.id && (
+                    {editingExercise === exercise._id && (
                       <ExerciseForm
                         handleExercise={handleEditExercise}
                         editExercise={exercise}

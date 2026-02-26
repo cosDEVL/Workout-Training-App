@@ -22,11 +22,11 @@ export default function WorkoutTab({ workout, handleDelete }) {
           </p>
         </div>
         <div className="date-creation">
-          <p>Created in: {workout.dateCreation.toString().split("T")[0]}</p>
+          <p>Created in: {workout.createdAt.split("T")[0]}</p>
         </div>
       </div>
       <div className="delete-workout">
-        <button onClick={() => handleNavigateWorkout(workout.id)}>Open</button>
+        <button onClick={() => handleNavigateWorkout(workout._id)}>Open</button>
       </div>
     </div>
   );

@@ -70,7 +70,6 @@ exports.updateWorkout = catchAsync(async (req, res, next) => {
     req.body,
     {
       returnDocument: "after",
-      runValidators: true,
     },
   ).populate("exerciseList.exerciseRef");
 

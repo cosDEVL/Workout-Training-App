@@ -39,6 +39,8 @@ const EXERCISE_TYPES = [
 ];
 
 export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const [exerciseList, setExerciseList] = useState([]);
 
   const [queryName, setQueryName] = useState("");
@@ -54,9 +56,7 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
     const waitFetch = setTimeout(async function fetchExercises() {
       try {
         //Proprieta' interessate: name, equipments, bodyParts, exerciseType, imageUrl
-        const url = new URL(
-          `https://exercisedbv2.ascendapi.com/api/v1/exercises`,
-        );
+        const url = new URL(`${apiUrl}/api/v1/exercises`);
         url.searchParams.append("limit", "25");
 
         if (queryName) url.searchParams.append("name", queryName);
@@ -69,8 +69,6 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
 
         const res = await fetch(url.toString(), { signal: controller.signal });
 
-        console.log(url);
-
         const results = await res.json();
         setExerciseList(results.data);
       } catch (error) {
@@ -82,7 +80,7 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
       controller.abort();
       clearTimeout(waitFetch);
     };
-  }, [queryName, queryBodyParts, queryEquipments, queryExerciseTypes]);
+  }, [queryName, queryBodyParts, queryEquipments, queryExerciseTypes, apiUrl]);
 
   function handleToggleCategory(setQuery, categoryName) {
     setQuery((prev) => {
@@ -167,7 +165,7 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
           <div
             key={exercise.exerciseId}
             className="selectable-exercise"
-            onClick={() => onHandleSelect(exercise.name)}
+            onClick={() => onHandleSelect(exercise)}
           >
             <img src={exercise.imageUrl} alt={`${exercise.name}`} />
             <div className="info">

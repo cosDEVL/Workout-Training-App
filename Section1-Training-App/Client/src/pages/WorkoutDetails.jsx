@@ -7,21 +7,21 @@ import Exercise from "../components/CreateWorkout-components/Exercise";
 import "./workoutDetails.css";
 
 export default function WorkoutDetails() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const { state } = useLocation();
   const { workoutID } = useParams();
-  console.log(workoutID);
 
   const [workout, setWorkout] = useState(state?.workout || null);
-  const [isLoading, setIsLoading] = useState(workout ? false : true);
   console.log(workout);
+  const [isLoading, setIsLoading] = useState(workout ? false : true);
 
   useEffect(() => {
     if (!workout) {
       async function fetchWorkout() {
         try {
           const response = await fetch(
-            `http://localhost:3000/WORKOUT-LIST/${workoutID}`,
+            `${apiUrl}/api/v1/workouts/${workoutID}`,
           );
           const data = await response.json();
 
@@ -35,10 +35,10 @@ export default function WorkoutDetails() {
       }
       fetchWorkout();
     }
-  }, [workout, workoutID, navigate]);
+  }, [workout, workoutID, navigate, apiUrl]);
 
   function handleNavigateEdit() {
-    navigate(`/edit-workout/${workout.id}`, {
+    navigate(`/edit-workout/${workout._id}`, {
       state: {
         workout,
       },
@@ -48,7 +48,7 @@ export default function WorkoutDetails() {
   async function handleDeleteWorkout() {
     if (!confirm("Do you want to delete the workout?")) return;
     try {
-      await fetch(`http://localhost:3000/WORKOUT-LIST/${workout.id}`, {
+      await fetch(`${apiUrl}/api/v1/workouts/${workout._id}`, {
         method: "DELETE",
       });
 
@@ -86,7 +86,10 @@ export default function WorkoutDetails() {
               </p>
               <div className="list">
                 {workout.exerciseList.map((exercise, i) => (
-                  <Exercise key={exercise.id} exercise={exercise} />
+                  <Exercise
+                    key={exercise._id || workout.exerciseList.length + i}
+                    exercise={exercise}
+                  />
                 ))}
               </div>
             </div>

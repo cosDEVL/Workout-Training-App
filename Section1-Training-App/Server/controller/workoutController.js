@@ -29,7 +29,7 @@ exports.workoutDetails = catchAsync(async (req, res) => {
     status: "ok",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout fetched successfully",
-    data: workout,
+    data: workout[0],
   });
 });
 

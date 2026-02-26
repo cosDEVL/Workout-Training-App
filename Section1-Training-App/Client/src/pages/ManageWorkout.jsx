@@ -1,84 +1,72 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Navbar from "../components/NavBar-Components/Navbar";
 import DisplayArea from "../components/DisplayArea";
 import ExerciseForm from "../components/CreateWorkout-components/ExerciseForm";
-import Exercise from "../components/CreateWorkout-components/Exercise";
 
 import "./manageWorkout.css";
-import { DragDropProvider } from "@dnd-kit/react";
-import { move } from "@dnd-kit/helpers";
+
 import { useLocation, useNavigate, useParams } from "react-router";
+import AddedExerciseList from "../components/CreateWorkout-components/AddedExerciseList";
 
 export default function ManageWorkout({ editMode = false }) {
   const apiUrl = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
+
   const { workoutID } = useParams();
-
   const { state } = useLocation();
-  // const editWorkout = location.state?.workout;
-
   const [editWorkout, setEditWorkout] = useState(state?.workout || null);
 
-  const exerciseList = editWorkout?.exerciseList.map((exercise) => {
-    return { ...exercise };
-  });
-
   const [openAddForm, setOpenAddForm] = useState(false);
-  // const [openEditForm, setOpenEditForm] = useState(false);
-  const [editingExercise, setEditingExercise] = useState(null);
   const [workoutName, setWorkoutName] = useState(
-    editWorkout ? editWorkout.workoutName : "",
+    editWorkout?.workoutName || "",
   );
 
-  const [exercises, setExercises] = useState(exerciseList ? exerciseList : []);
+  const [exercises, setExercises] = useState(
+    editWorkout?.exerciseList.map((exercise) => new Object({ ...exercise })) ||
+      [],
+  );
 
-  useEffect(() => {
-    if (editMode && !editWorkout) {
-      async function fetchEditWorkout() {
-        try {
-          const response = await fetch(
-            `${apiUrl}/api/v1/workouts/${workoutID}`,
-          );
-          const json = await response.json();
+  // useCallback to store function reference between each re-render
+  const fetchWorkout = useCallback(async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/v1/workouts/${workoutID}`);
+      const json = await response.json();
 
-          setEditWorkout(json.data[0]);
-          setWorkoutName(json.data[0].workoutName);
-          setExercises(
-            json.data[0].exerciseList.map((exercise) => {
-              return { ...exercise };
-            }),
-          );
-        } catch (error) {
-          console.log(error);
-          navigate("/workout-list");
-        }
-      }
-
-      fetchEditWorkout();
+      return json.data;
+    } catch (error) {
+      console.log(error);
+      navigate("/workout-list");
     }
-  }, [editMode, editWorkout, workoutID, navigate, apiUrl]);
+  }, [apiUrl, workoutID, navigate]);
 
-  function handleAddExercise(newExercise) {
-    setExercises((prev) => [...prev, newExercise]);
-  }
+  // useEffect to execute fetchWorkout and setting initial data if needed
+  useEffect(() => {
+    async function setWorkoutData() {
+      const workoutData = await fetchWorkout();
 
-  function handleDeleteExercise(exerciseId) {
-    setExercises((prev) =>
-      prev.filter((exercise) => exercise._id !== exerciseId),
-    );
-  }
-  console.log(exercises);
+      setEditWorkout(workoutData);
+      setWorkoutName(workoutData.workoutName);
+      setExercises(
+        workoutData.exerciseList.map((exercise) => {
+          return { ...exercise };
+        }),
+      );
+    }
 
-  function handleEditExercise(editedExercise) {
-    setExercises((prev) =>
-      prev.map((exercise) => {
-        console.log(editedExercise, exercise);
-        if (exercise._id === editedExercise._id) {
-          return editedExercise;
-        }
-        return exercise;
-      }),
-    );
+    if (editMode && !editWorkout) {
+      setWorkoutData();
+    }
+  }, [editMode, editWorkout, workoutID, navigate, apiUrl, fetchWorkout]);
+
+  // function to send workout data based on the method
+  async function sendWorkout(method, url, body) {
+    await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    });
   }
 
   async function handleSubmit(e) {
@@ -90,40 +78,26 @@ export default function ManageWorkout({ editMode = false }) {
     }
 
     try {
-      const workout = {
-        workoutName,
-        exerciseList: exercises,
-      };
-
-      // console.log(workout);
       let url = `${apiUrl}/api/v1/workouts`;
 
-      console.log(workout);
-      if (editMode) url = url.concat(`/${editWorkout._id}`);
-
-      const response = await fetch(url, {
-        method: editMode ? "PATCH" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workout),
+      const workout = JSON.stringify({
+        workoutName,
+        exerciseList: exercises,
       });
 
-      console.log(response);
+      if (editMode) {
+        // Update Workout
+        sendWorkout("PATCH", url.concat(`/${editWorkout._id}`), workout);
+      } else {
+        // Send new Workout
+        sendWorkout("POST", url, workout);
+      }
 
       setWorkoutName("");
       setExercises([]);
 
       if (editMode) {
-        navigate(`/workout/${editWorkout._id}`, {
-          state: {
-            workout: {
-              _id: editWorkout._id,
-              workoutName,
-              exerciseList: exercises,
-            },
-          },
-        });
+        navigate(`/workout/${editWorkout._id}`);
       } else {
         navigate("/workout-list");
       }
@@ -132,6 +106,10 @@ export default function ManageWorkout({ editMode = false }) {
     }
 
     return;
+  }
+
+  function handleAddExercise(newExercise) {
+    setExercises((prev) => [...prev, newExercise]);
   }
 
   return (
@@ -156,51 +134,18 @@ export default function ManageWorkout({ editMode = false }) {
             <div className="add-exercise">
               <button onClick={() => setOpenAddForm(true)}>Add Exercise</button>
             </div>
+
             {openAddForm && (
               <ExerciseForm
                 handleExercise={handleAddExercise}
                 closeForm={() => setOpenAddForm(false)}
               />
             )}
-            <DragDropProvider
-              onDragEnd={(event) => {
-                setExercises((prev) => move(prev, event));
-              }}
-            >
-              <div className="added-exercise">
-                {exercises.map((exercise, i) => (
-                  <Exercise
-                    key={exercises.length + i}
-                    editMode={true}
-                    exercise={exercise}
-                    id={exercise._id}
-                    index={i}
-                  >
-                    <div className="buttons">
-                      <button
-                        className="edit"
-                        onClick={() => setEditingExercise(exercise._id)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete"
-                        onClick={() => handleDeleteExercise(exercise._id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    {editingExercise === exercise._id && (
-                      <ExerciseForm
-                        handleExercise={handleEditExercise}
-                        editExercise={exercise}
-                        closeForm={() => setEditingExercise(null)}
-                      />
-                    )}
-                  </Exercise>
-                ))}
-              </div>
-            </DragDropProvider>
+
+            <AddedExerciseList
+              exercises={exercises}
+              setExercises={setExercises}
+            />
           </div>
         </div>
       </DisplayArea>

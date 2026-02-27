@@ -3,8 +3,8 @@ import Navbar from "../components/NavBar-Components/Navbar";
 import DisplayArea from "../components/DisplayArea";
 import { useNavigate } from "react-router";
 
-import "./workoutList.css";
 import WorkoutTab from "../components/WorkoutList-Components/WorkoutTab";
+import "./workoutList.css";
 
 export default function WorkoutList() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -25,7 +25,7 @@ export default function WorkoutList() {
     }
 
     fetchWorkout();
-  }, []);
+  }, [apiUrl]);
 
   function newWorkout() {
     navigate("/create-workout");
@@ -33,13 +33,15 @@ export default function WorkoutList() {
 
   async function handleDeleteWorkout(idWorkout) {
     try {
-      await fetch(`http://localhost:3000/WORKOUT-LIST/${idWorkout}`, {
-        method: "DELETE",
-      });
+      if (confirm("Want to delete this workout?")) {
+        await fetch(`${apiUrl}/api/v1/workouts/${idWorkout}`, {
+          method: "DELETE",
+        });
 
-      setWorkoutList((prev) =>
-        prev.filter((workout) => workout.id !== idWorkout),
-      );
+        setWorkoutList((prev) =>
+          prev.filter((workout) => workout._id !== idWorkout),
+        );
+      }
     } catch (error) {
       console.log(error);
     }

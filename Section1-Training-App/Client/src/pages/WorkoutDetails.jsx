@@ -14,6 +14,7 @@ export default function WorkoutDetails() {
   const { workoutID } = useParams();
 
   const [workout, setWorkout] = useState(state?.workout || null);
+  console.log(workout);
 
   const [isLoading, setIsLoading] = useState(workout ? false : true);
 

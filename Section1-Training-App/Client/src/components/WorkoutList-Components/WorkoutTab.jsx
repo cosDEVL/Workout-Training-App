@@ -27,6 +27,7 @@ export default function WorkoutTab({ workout, handleDelete }) {
       </div>
       <div className="delete-workout">
         <button onClick={() => handleNavigateWorkout(workout._id)}>Open</button>
+        <button onClick={() => handleDelete(workout._id)}>Delete</button>
       </div>
     </div>
   );

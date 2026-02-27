@@ -36,6 +36,8 @@ export default function ExerciseForm({
     setSets(newSets);
   }
 
+  console.log(sets);
+
   function handleRemoveSet(index) {
     const newSets = sets.filter((set) => sets.indexOf(set) !== index);
     setSets(newSets);
@@ -50,16 +52,13 @@ export default function ExerciseForm({
       sets,
     };
 
-    console.log(editExercise);
-    console.log(exerciseData);
-
     handleExercise(
       editExercise
         ? exerciseData
         : {
             exerciseRef: exerciseData.exerciseRef,
             sets: exerciseData.sets.map((set) => {
-              return { reps: set.reps, weight: set.weight };
+              return { reps: set.reps, weight: set.weight ? set.weight : 0 };
             }),
           },
     );

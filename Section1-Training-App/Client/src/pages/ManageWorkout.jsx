@@ -14,16 +14,19 @@ export default function ManageWorkout({ editMode = false }) {
 
   const { workoutID } = useParams();
   const { state } = useLocation();
-  const [editWorkout, setEditWorkout] = useState(state?.workout || null);
+  const [editWorkout, setEditWorkout] = useState(
+    state ? { objID: crypto.randomUUID(), workout: state.workout } : null,
+  );
 
   const [openAddForm, setOpenAddForm] = useState(false);
   const [workoutName, setWorkoutName] = useState(
-    editWorkout?.workoutName || "",
+    editWorkout?.workout.workoutName || "",
   );
 
   const [exercises, setExercises] = useState(
-    editWorkout?.exerciseList.map((exercise) => new Object({ ...exercise })) ||
-      [],
+    editWorkout?.workout.exerciseList.map(
+      (exercise) => new Object({ ...exercise }),
+    ) || [],
   );
 
   // useCallback to store function reference between each re-render
@@ -44,7 +47,7 @@ export default function ManageWorkout({ editMode = false }) {
     async function setWorkoutData() {
       const workoutData = await fetchWorkout();
 
-      setEditWorkout(workoutData);
+      setEditWorkout({ objID: crypto.randomUUID(), workout: workoutData });
       setWorkoutName(workoutData.workoutName);
       setExercises(
         workoutData.exerciseList.map((exercise) => {
@@ -87,7 +90,11 @@ export default function ManageWorkout({ editMode = false }) {
 
       if (editMode) {
         // Update Workout
-        sendWorkout("PATCH", url.concat(`/${editWorkout._id}`), workout);
+        sendWorkout(
+          "PATCH",
+          url.concat(`/${editWorkout.workout._id}`),
+          workout,
+        );
       } else {
         // Send new Workout
         sendWorkout("POST", url, workout);
@@ -97,7 +104,7 @@ export default function ManageWorkout({ editMode = false }) {
       setExercises([]);
 
       if (editMode) {
-        navigate(`/workout/${editWorkout._id}`);
+        navigate(`/workout/${editWorkout.workout._id}`);
       } else {
         navigate("/workout-list");
       }

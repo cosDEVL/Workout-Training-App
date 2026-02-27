@@ -53,17 +53,6 @@ export default function AddedExerciseList({ exercises, setExercises }) {
               handleDelete={handleDeleteExercise}
               exerciseIndex={i}
             />
-            {/* <div className="buttons">
-              <button className="edit" onClick={() => setEditingExercise(i)}>
-                Edit
-              </button>
-              <button
-                className="delete"
-                onClick={() => handleDeleteExercise(i)}
-              >
-                Delete
-              </button>
-            </div> */}
           </Exercise>
         ))}
       </div>

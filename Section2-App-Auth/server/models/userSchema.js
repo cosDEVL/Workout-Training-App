@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const UserSchema = mongoose.Schema({
+  tokenVersion: {
+    type: Number,
+    default: 0,
+    required: true,
+    select: false,
+  },
   username: {
     type: String,
     required: [true, "Insert username"],
@@ -50,14 +56,14 @@ const UserSchema = mongoose.Schema({
   passwordExpiresAt: Date,
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+// Prima di salvare il documento, viene eseguito salting&hashing della password inviata in chiaro
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
+  // hashing con cost factor 12. totali iterazioni in questo caso 4096. 2^12
   this.password = await bcrypt.hash(this.password, 12);
 
   this.confirmPassword = undefined;
-
-  next();
 });
 
 UserSchema.methods.correctPassword = async function (
@@ -65,6 +71,12 @@ UserSchema.methods.correctPassword = async function (
   userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+UserSchema.methods.revokeToken = async function () {
+  this.tokenVersion += 1;
+
+  await this.save({ validateBeforeSave: false });
 };
 
 const User = mongoose.model("User", UserSchema);

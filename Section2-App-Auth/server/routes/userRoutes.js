@@ -17,10 +17,10 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", fortKnoxBouncer, logout);
 
-router.patch("/update-self", updateSelf);
-router.delete("/delete-self", deleteSelf); // Soft-Delete
+router.patch("/update-self", fortKnoxBouncer, updateSelf);
+router.delete("/delete-self", fortKnoxBouncer, deleteSelf); // Soft-Delete
 
-router.patch("/update-password", updatePassword);
+router.patch("/update-password", fortKnoxBouncer, updatePassword);
 router.post("/forgot-password", forgotPassword);
 router.patch("/reset-password", resetPassword);
 

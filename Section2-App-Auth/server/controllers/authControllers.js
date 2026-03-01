@@ -40,7 +40,6 @@ const createSendToken = (user, req, res, statusCode, message = "") => {
     status: "success",
     request: `${req.method} ${req.originalUrl}`,
     message,
-    token: fortKnoxToken,
   });
 };
 
@@ -109,26 +108,38 @@ exports.logout = catchAsync(async (req, res) => {
 });
 
 exports.updateSelf = catchAsync(async (req, res) => {
-  res.status(502).json({
-    status: "Warning!",
+  const { username, email } = req.body;
+
+  await User.findByIdAndUpdate(req.user.id, { username, email });
+
+  res.status(200).json({
+    status: "success",
     request: `${req.method} ${req.originalUrl}`,
-    message: "Route not defined yet",
+    message: "User data updated",
   });
 });
 
 exports.deleteSelf = catchAsync(async (req, res) => {
-  res.status(502).json({
-    status: "Warning!",
+  await User.findByIdAndUpdate(req.user.id, { isActive: false });
+
+  res.status(200).json({
+    status: "success",
     request: `${req.method} ${req.originalUrl}`,
-    message: "Route not defined yet",
+    message: "User deactivated",
   });
 });
 
 exports.updatePassword = catchAsync(async (req, res) => {
-  res.status(502).json({
-    status: "Warning!",
+  const { newPassword, confirmNewPassword } = req.body;
+
+  const user = await User.findById(req.user.id);
+
+  await user.changePassword(newPassword, confirmNewPassword);
+
+  res.status(200).json({
+    status: "success",
     request: `${req.method} ${req.originalUrl}`,
-    message: "Route not defined yet",
+    message: "User password updated",
   });
 });
 

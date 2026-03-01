@@ -21,8 +21,11 @@ exports.standardBouncer = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   // Recupero e verifica user
-  const user = await User.findById(decoded.id).select("+tokenVersion");
-  if (!user || decoded.tokenVersion !== user.tokenVersion) {
+  const user = await User.findById(decoded.id).select([
+    "+tokenVersion",
+    "+isActive",
+  ]);
+  if (!user || !user.isActive || decoded.tokenVersion !== user.tokenVersion) {
     return next(new AppError(404, "User ID or Token not valid"));
   }
 
@@ -54,10 +57,18 @@ exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
 
   // Verifica di uguaglianza delle due stringhe
   if (headerToken === decodedJWT.randomString) {
-    const user = await User.findById(decodedJWT.id).select("+tokenVersion");
+    const user = await User.findById(decodedJWT.id).select([
+      "+tokenVersion",
+      "+isActive",
+    ]);
+    console.log(user);
 
     // Verifica utente e tokenVersion
-    if (!user || decodedJWT.tokenVersion !== user.tokenVersion) {
+    if (
+      !user ||
+      !user.isActive ||
+      decodedJWT.tokenVersion !== user.tokenVersion
+    ) {
       return next(new AppError(404, "User ID or Token not valid"));
     }
 

@@ -73,6 +73,19 @@ UserSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+UserSchema.methods.changePassword = async function (
+  newPassword,
+  confirmNewPassword,
+) {
+  console.log(this.password);
+  this.password = newPassword;
+  this.confirmPassword = confirmNewPassword;
+
+  console.log(this.password, this.confirmPassword);
+
+  await this.save({ validateBeforeSave: true });
+};
+
 UserSchema.methods.revokeToken = async function () {
   console.log(this.tokenVersion);
   this.tokenVersion += 1;

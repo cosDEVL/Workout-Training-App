@@ -74,7 +74,9 @@ UserSchema.methods.correctPassword = async function (
 };
 
 UserSchema.methods.revokeToken = async function () {
+  console.log(this.tokenVersion);
   this.tokenVersion += 1;
+  console.log(this.tokenVersion);
 
   await this.save({ validateBeforeSave: false });
 };

@@ -11,10 +11,11 @@ const {
   forgotPassword,
   resetPassword,
 } = require("../controllers/authControllers");
+const { standardBouncer, fortKnoxBouncer } = require("../middleware/protect");
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/logout", logout);
+router.post("/logout", fortKnoxBouncer, logout);
 
 router.patch("/update-self", updateSelf);
 router.delete("/delete-self", deleteSelf); // Soft-Delete

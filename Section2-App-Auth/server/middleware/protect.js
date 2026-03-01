@@ -31,6 +31,7 @@ exports.standardBouncer = catchAsync(async (req, res, next) => {
 });
 
 exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
+  // Recupero e parsing di JWT token e randomString Token
   const jsonToken = req.cookies.jwt;
   const headerAuth = req.headers.authorization;
   let headerToken;
@@ -39,6 +40,10 @@ exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
     headerToken = headerAuth.split(" ")[1];
   }
 
+  // Verifica dei due token
+  if (!jsonToken) {
+    return next(new AppError(401, "Missing JWT cookie"));
+  }
   if (!headerToken) {
     return next(new AppError(401, "You are not logged in."));
   }
@@ -47,11 +52,11 @@ exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
     process.env.JWT_SECRET,
   );
 
+  // Verifica di uguaglianza delle due stringhe
   if (headerToken === decodedJWT.randomString) {
     const user = await User.findById(decodedJWT.id).select("+tokenVersion");
 
-    console.log(decodedJWT, user);
-
+    // Verifica utente e tokenVersion
     if (!user || decodedJWT.tokenVersion !== user.tokenVersion) {
       return next(new AppError(404, "User ID or Token not valid"));
     }

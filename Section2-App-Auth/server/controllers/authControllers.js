@@ -89,9 +89,17 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.logout = catchAsync(async (req, res) => {
   const user = await User.findById(req.user.id).select("+tokenVersion");
-
   // Invalida tutti i token passati
   await user.revokeToken();
+
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.cookie("accessToken", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+  });
 
   res.status(200).json({
     status: "success",

@@ -61,7 +61,6 @@ exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
       "+tokenVersion",
       "+isActive",
     ]);
-    console.log(user);
 
     // Verifica utente e tokenVersion
     if (

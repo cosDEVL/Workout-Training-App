@@ -73,10 +73,15 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: email }).select([
     "+password",
     "+tokenVersion",
+    "+isActive",
   ]);
 
   // Verifica esistenza utente o correttezza password
-  if (!user || !(await user.correctPassword(password, user.password)))
+  if (
+    !user ||
+    !user.isActive ||
+    !(await user.correctPassword(password, user.password))
+  )
     return next(new AppError(401, "Email or Password incorrect. Try Again"));
 
   // Prima di creare il nuovo token, invalida quello/i precedente/i
@@ -110,7 +115,11 @@ exports.logout = catchAsync(async (req, res) => {
 exports.updateSelf = catchAsync(async (req, res) => {
   const { username, email } = req.body;
 
-  await User.findByIdAndUpdate(req.user.id, { username, email });
+  await User.findByIdAndUpdate(
+    req.user.id,
+    { username, email },
+    { new: true, runValidators: true },
+  );
 
   res.status(200).json({
     status: "success",
@@ -122,6 +131,15 @@ exports.updateSelf = catchAsync(async (req, res) => {
 exports.deleteSelf = catchAsync(async (req, res) => {
   await User.findByIdAndUpdate(req.user.id, { isActive: false });
 
+  res.cookie("jwt", "deactivate", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.cookie("accessToken", "deactivate", {
+    expires: new Date(Date.now() + 10 * 1000),
+  });
+
   res.status(200).json({
     status: "success",
     request: `${req.method} ${req.originalUrl}`,
@@ -129,18 +147,22 @@ exports.deleteSelf = catchAsync(async (req, res) => {
   });
 });
 
-exports.updatePassword = catchAsync(async (req, res) => {
-  const { newPassword, confirmNewPassword } = req.body;
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).select([
+    "+password",
+    "+tokenVersion",
+  ]);
+
+  if (!user || !(await user.correctPassword(currentPassword, user.password))) {
+    return next(new AppError(400, "Please, provide a valid password"));
+  }
 
   await user.changePassword(newPassword, confirmNewPassword);
+  await user.revokeToken();
 
-  res.status(200).json({
-    status: "success",
-    request: `${req.method} ${req.originalUrl}`,
-    message: "User password updated",
-  });
+  createSendToken(user, req, res, 200, "User password updated");
 });
 
 exports.forgotPassword = catchAsync(async (req, res) => {

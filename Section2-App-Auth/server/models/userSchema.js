@@ -77,11 +77,8 @@ UserSchema.methods.changePassword = async function (
   newPassword,
   confirmNewPassword,
 ) {
-  console.log(this.password);
   this.password = newPassword;
   this.confirmPassword = confirmNewPassword;
-
-  console.log(this.password, this.confirmPassword);
 
   await this.save({ validateBeforeSave: true });
 };

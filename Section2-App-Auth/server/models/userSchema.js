@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const UserSchema = mongoose.Schema({
   tokenVersion: {
@@ -102,10 +103,10 @@ UserSchema.methods.revokeToken = async function () {
 UserSchema.methods.createResetToken = async function () {
   const token = crypto.randomUUID();
 
-  this.resetToken = token;
+  this.resetToken = crypto.createHash("sha256").update(token).digest("hex");
   this.resetExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-  await this.save();
+  await this.save({ validateBeforeSave: false });
 
   return token;
 };

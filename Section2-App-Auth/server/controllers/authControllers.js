@@ -178,25 +178,41 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   const resetToken = await user.createResetToken();
 
-  await transport.sendMail({
-    from: "server@email.test",
-    to: `${email}`,
-    subject: "Reset Password",
-    text: `Reset Password Token: ${resetToken}`,
-  });
-
-  res.status(200).json({
-    status: "success",
-    request: `${req.method} ${req.originalUrl}`,
-    message: "Email sent. Check your mail box",
-  });
+  try {
+    await transport.sendMail({
+      from: "server@email.test",
+      to: `${email}`,
+      subject: "Reset Password",
+      text: `Reset Password Token: ${resetToken}`,
+    });
+    res.status(200).json({
+      status: "success",
+      request: `${req.method} ${req.originalUrl}`,
+      message: "Email sent. Check your mail box",
+    });
+  } catch (error) {
+    user.resetToken = undefined;
+    user.resetExpiresAt = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(
+      new AppError(
+        500,
+        "There was an error sending the email. Try again later",
+      ),
+    );
+  }
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
   const { resetToken } = req.params;
   const { newPassword, confirmNewPassword } = req.body;
 
-  const user = await User.findOne({ resetToken }).select([
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const user = await User.findOne({ hashedToken }).select([
     "+tokenVersion",
     "+password",
   ]);

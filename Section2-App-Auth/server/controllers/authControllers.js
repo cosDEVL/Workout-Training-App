@@ -2,6 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userSchema");
+const transport = require("../utils/mailTransporter");
 
 const signToken = (id, tokenVersion, randomString) => {
   return jwt.sign({ id, tokenVersion, randomString }, process.env.JWT_SECRET, {
@@ -165,18 +166,57 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createSendToken(user, req, res, 200, "User password updated");
 });
 
-exports.forgotPassword = catchAsync(async (req, res) => {
-  res.status(502).json({
-    status: "Warning!",
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return next(new AppError(401, "Please, enter a valid Email"));
+
+  const user = await User.findOne({ email });
+
+  if (!user) return next(new AppError(404, "No user found with that email"));
+
+  const resetToken = await user.createResetToken();
+
+  await transport.sendMail({
+    from: "server@email.test",
+    to: `${email}`,
+    subject: "Reset Password",
+    text: `Reset Password Token: ${resetToken}`,
+  });
+
+  res.status(200).json({
+    status: "success",
     request: `${req.method} ${req.originalUrl}`,
-    message: "Route not defined yet",
+    message: "Email sent. Check your mail box",
   });
 });
 
-exports.resetPassword = catchAsync(async (req, res) => {
-  res.status(502).json({
-    status: "Warning!",
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const { resetToken } = req.params;
+  const { newPassword, confirmNewPassword } = req.body;
+
+  const user = await User.findOne({ resetToken }).select([
+    "+tokenVersion",
+    "+password",
+  ]);
+
+  if (!user || Date.now() >= new Date(user.resetExpiresAt))
+    return next(new AppError(401, "Invalid token or reset no more available"));
+
+  const compareResult = await user.correctPassword(newPassword, user.password);
+
+  if (compareResult)
+    return next(
+      new AppError(403, "The password inserted matches with the current one"),
+    );
+
+  await user.changePassword(newPassword, confirmNewPassword);
+  await user.revokeToken();
+
+  res.status(200).json({
+    status: "success",
     request: `${req.method} ${req.originalUrl}`,
-    message: "Route not defined yet",
+    message: "Password Reset succeded",
   });
 });

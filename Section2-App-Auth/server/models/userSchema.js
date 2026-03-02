@@ -52,8 +52,8 @@ const UserSchema = mongoose.Schema({
     select: false,
   },
   resetToken: String,
+  resetExpiresAt: Date,
   passwordChangedAt: Date,
-  passwordExpiresAt: Date,
 });
 
 // Prima di salvare il documento, viene eseguito salting&hashing della password inviata in chiaro
@@ -64,6 +64,16 @@ UserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 12);
 
   this.confirmPassword = undefined;
+});
+
+UserSchema.pre("save", function () {
+  if (!this.isModified("password") || this.isNew) return;
+
+  this.passwordChangedAt = Date.now();
+  if (this.resetToken && this.resetExpiresAt) {
+    this.resetToken = undefined;
+    this.resetExpiresAt = undefined;
+  }
 });
 
 UserSchema.methods.correctPassword = async function (
@@ -84,11 +94,20 @@ UserSchema.methods.changePassword = async function (
 };
 
 UserSchema.methods.revokeToken = async function () {
-  console.log(this.tokenVersion);
   this.tokenVersion += 1;
-  console.log(this.tokenVersion);
 
   await this.save({ validateBeforeSave: false });
+};
+
+UserSchema.methods.createResetToken = async function () {
+  const token = crypto.randomUUID();
+
+  this.resetToken = token;
+  this.resetExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+  await this.save();
+
+  return token;
 };
 
 const User = mongoose.model("User", UserSchema);

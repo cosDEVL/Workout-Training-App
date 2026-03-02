@@ -22,6 +22,6 @@ router.delete("/delete-self", fortKnoxBouncer, deleteSelf); // Soft-Delete
 
 router.patch("/update-password", fortKnoxBouncer, updatePassword);
 router.post("/forgot-password", forgotPassword);
-router.patch("/reset-password", resetPassword);
+router.patch("/reset-password/:resetToken", resetPassword);
 
 module.exports = router;

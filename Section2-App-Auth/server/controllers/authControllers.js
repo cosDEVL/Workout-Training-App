@@ -212,7 +212,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     .update(resetToken)
     .digest("hex");
 
-  const user = await User.findOne({ hashedToken }).select([
+  const user = await User.findOne({ resetToken: hashedToken }).select([
     "+tokenVersion",
     "+password",
   ]);

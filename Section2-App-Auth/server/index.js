@@ -1,5 +1,7 @@
 require("dotenv").config();
 const userRoutes = require("./routes/userRoutes");
+const dataRoutes = require("./routes/dataRoutes");
+
 const errorHandler = require("./controllers/errorController");
 const connectDB = require("./config/db");
 const express = require("express");
@@ -20,6 +22,7 @@ app.use(
 );
 
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/data", dataRoutes);
 app.all("/*\w", (req, res, next) => {
   next(new AppError(404, `Route ${req.originalUrl} not found`));
 });

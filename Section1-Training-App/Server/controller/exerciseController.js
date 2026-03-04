@@ -1,8 +1,10 @@
 const catchAsync = require("../utils/catchAsync");
 const Exercise = require("../model/exerciseSchema");
-const AppError = require("../middleware/AppError");
+const AppError = require("../utils/AppError");
 
 exports.exerciseList = catchAsync(async (req, res) => {
+  const userID = req.user.id;
+
   const { query } = req;
   const filter = {};
 
@@ -15,7 +17,26 @@ exports.exerciseList = catchAsync(async (req, res) => {
   if (query.exerciseType)
     filter.exerciseType = { $in: query.exerciseType.split(",") };
 
-  const data = await Exercise.find({ ...filter, isActive: true });
+  // const data = await Exercise.find({ ...filter, isActive: true });
+  const data = await Exercise.find({
+    $and: [
+      { ...filter, isActive: true },
+      {
+        $or: [
+          {
+            userID,
+            isGlobal: false,
+          },
+          {
+            isGlobal: true,
+          },
+        ],
+      },
+    ],
+  });
+
+  if (data.length === 0)
+    return next(new AppError(404, "No exercise available"));
 
   res.status(200).json({
     status: "ok",
@@ -27,7 +48,16 @@ exports.exerciseList = catchAsync(async (req, res) => {
 });
 
 exports.addNewExercise = catchAsync(async (req, res) => {
-  await Exercise.create(req.body);
+  const userID = req.user.id;
+  const { name, bodyParts, equipments, exerciseType } = req.body;
+
+  await Exercise.create({
+    userID,
+    name,
+    bodyParts,
+    equipments,
+    exerciseType,
+  });
 
   res.status(200).json({
     status: "ok",
@@ -37,10 +67,16 @@ exports.addNewExercise = catchAsync(async (req, res) => {
   });
 });
 
-exports.exerciseDetails = catchAsync(async (req, res) => {
-  const data = await Exercise.find({ exerciseId: req.params.id });
+exports.exerciseDetails = catchAsync(async (req, res, next) => {
+  const userID = req.user.id;
+  const _id = req.params.id;
 
-  if (data.length === 0) throw new AppError(404, "Exercise not found");
+  const data = await Exercise.findOne({
+    _id,
+    $or: [{ userID, isGlobal: false }, { isGlobal: true }],
+  });
+
+  if (!data) return next(new AppError(404, "Exercise not found"));
 
   res.status(200).json({
     status: "ok",
@@ -50,8 +86,23 @@ exports.exerciseDetails = catchAsync(async (req, res) => {
   });
 });
 
-exports.updateExercise = catchAsync(async (req, res) => {
-  await Exercise.findOneAndUpdate({ exerciseId: req.params.id }, req.body);
+exports.updateExercise = catchAsync(async (req, res, next) => {
+  const userID = req.user.id;
+  const _id = req.params.id;
+  const { name, imageUrl, bodyParts, equipments, exerciseType } = req.body;
+
+  const editedExercise = await Exercise.findOneAndUpdate(
+    { _id, userID, isGlobal: false },
+    { name, imageUrl, bodyParts, equipments, exerciseType },
+  );
+
+  if (!editedExercise)
+    return next(
+      new AppError(
+        404,
+        "Cannot edit an exercise that wasn't created by the user",
+      ),
+    );
 
   res.status(200).json({
     status: "ok",
@@ -60,11 +111,22 @@ exports.updateExercise = catchAsync(async (req, res) => {
   });
 });
 
-exports.deleteExercise = catchAsync(async (req, res) => {
-  await Exercise.findOneAndUpdate(
-    { exerciseId: req.params.id },
+exports.deleteExercise = catchAsync(async (req, res, next) => {
+  const userID = req.user.id;
+  const _id = req.params.id;
+
+  const deletedExercise = await Exercise.findOneAndUpdate(
+    { _id, userID, isGlobal: false },
     { isActive: false },
   );
+
+  if (!deletedExercise)
+    return next(
+      new AppError(
+        404,
+        "Cannot delete an exercise that wasn't created by the user",
+      ),
+    );
 
   res.status(200).json({
     status: "ok",

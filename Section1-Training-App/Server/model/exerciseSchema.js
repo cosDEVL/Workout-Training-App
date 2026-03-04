@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 
 const exerciseSchema = mongoose.Schema(
   {
-    exerciseId: {
-      type: String,
+    userID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    isGlobal: {
+      type: Boolean,
       required: true,
-      unique: true,
+      default: false,
     },
     name: {
       type: String,

@@ -2,18 +2,27 @@ require("dotenv").config();
 
 const workoutRoutes = require("./routes/workoutRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
+const userRoutes = require("./routes/userRoutes");
 const errorHandler = require("./controller/errorController");
 
 const express = require("express");
 const cors = require("cors");
-const AppError = require("./middleware/AppError");
+const cookieParser = require("cookie-parser");
+const AppError = require("./utils/AppError");
 const connectDB = require("./config/db");
 const app = express();
 const PORT = 8080;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
+app.use(cookieParser());
 
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/workouts", workoutRoutes);
 app.use("/api/v1/exercises", exerciseRoutes);
 app.all("/*\w", (req, res, next) => {

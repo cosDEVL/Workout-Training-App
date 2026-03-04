@@ -1,6 +1,6 @@
 const customExercises = [
   {
-    exerciseId: "custom-001",
+    isGlobal: true,
     name: "Back Extension",
 
     bodyParts: ["Lower Back", "Glutes"],
@@ -8,7 +8,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-002",
+    isGlobal: true,
     name: "Bench Dip",
 
     bodyParts: ["Triceps", "Chest", "Shoulders"],
@@ -16,7 +16,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-003",
+    isGlobal: true,
     name: "Bench Press",
 
     bodyParts: ["Chest", "Triceps", "Shoulders"],
@@ -24,7 +24,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-004",
+    isGlobal: true,
     name: "Bent Over Row",
 
     bodyParts: ["Back", "Biceps"],
@@ -32,7 +32,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-005",
+    isGlobal: true,
     name: "Bicep Curl",
 
     bodyParts: ["Biceps"],
@@ -40,7 +40,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-006",
+    isGlobal: true,
     name: "Bulgarian Split Squat",
 
     bodyParts: ["Quadriceps", "Glutes"],
@@ -48,7 +48,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-007",
+    isGlobal: true,
     name: "Cable Crossover",
 
     bodyParts: ["Chest"],
@@ -56,7 +56,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-008",
+    isGlobal: true,
     name: "Cable Crunch",
 
     bodyParts: ["Abs"],
@@ -64,7 +64,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-009",
+    isGlobal: true,
     name: "Chest Fly",
 
     bodyParts: ["Chest"],
@@ -72,7 +72,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-010",
+    isGlobal: true,
     name: "Chest Press",
 
     bodyParts: ["Chest", "Triceps", "Shoulders"],
@@ -80,7 +80,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-011",
+    isGlobal: true,
     name: "Crunch",
 
     bodyParts: ["Abs"],
@@ -88,7 +88,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-012",
+    isGlobal: true,
     name: "Deadlift",
 
     bodyParts: ["Full Body", "Back", "Glutes", "Hamstrings"],
@@ -96,7 +96,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-013",
+    isGlobal: true,
     name: "Face Pull",
 
     bodyParts: ["Shoulders", "Back"],
@@ -104,7 +104,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-014",
+    isGlobal: true,
     name: "Front Raise",
 
     bodyParts: ["Shoulders"],
@@ -112,7 +112,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-015",
+    isGlobal: true,
     name: "Lateral Raise",
 
     bodyParts: ["Shoulders"],
@@ -120,7 +120,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-016",
+    isGlobal: true,
     name: "Front Squat",
 
     bodyParts: ["Quadriceps", "Glutes", "Core"],
@@ -128,7 +128,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-017",
+    isGlobal: true,
     name: "Squat",
 
     bodyParts: ["Quadriceps", "Glutes", "Hamstrings"],
@@ -136,7 +136,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-018",
+    isGlobal: true,
     name: "Hack Squat",
 
     bodyParts: ["Quadriceps", "Glutes"],
@@ -144,7 +144,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-019",
+    isGlobal: true,
     name: "Hammer Curl",
 
     bodyParts: ["Biceps", "Forearms"],
@@ -152,7 +152,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-020",
+    isGlobal: true,
     name: "Hanging Leg Raise",
 
     bodyParts: ["Abs"],
@@ -160,7 +160,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-021",
+    isGlobal: true,
     name: "Hip Adductor",
 
     bodyParts: ["Hips", "Thighs"],
@@ -168,7 +168,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-022",
+    isGlobal: true,
     name: "Hip Abductor",
 
     bodyParts: ["Hips", "Glutes"],
@@ -176,7 +176,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-023",
+    isGlobal: true,
     name: "Hip Thrust",
 
     bodyParts: ["Glutes", "Hamstrings"],
@@ -184,7 +184,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-024",
+    isGlobal: true,
     name: "Lat Machine",
 
     bodyParts: ["Back", "Biceps"],
@@ -192,7 +192,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-025",
+    isGlobal: true,
     name: "Low Pulley",
 
     bodyParts: ["Back", "Biceps"],
@@ -200,7 +200,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-026",
+    isGlobal: true,
     name: "Leg Extension",
 
     bodyParts: ["Quadriceps"],
@@ -208,7 +208,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-027",
+    isGlobal: true,
     name: "Leg Curl",
 
     bodyParts: ["Hamstrings"],
@@ -216,7 +216,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-028",
+    isGlobal: true,
     name: "Leg Press",
 
     bodyParts: ["Quadriceps", "Glutes", "Hamstrings"],
@@ -224,7 +224,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-029",
+    isGlobal: true,
     name: "Calf Raise",
 
     bodyParts: ["Calves"],
@@ -232,7 +232,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-030",
+    isGlobal: true,
     name: "Lunge",
 
     bodyParts: ["Quadriceps", "Glutes", "Hamstrings"],
@@ -240,7 +240,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-031",
+    isGlobal: true,
     name: "Military Press",
 
     bodyParts: ["Shoulders", "Triceps"],
@@ -248,7 +248,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-032",
+    isGlobal: true,
     name: "Pendlay Row",
 
     bodyParts: ["Back", "Biceps"],
@@ -256,7 +256,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-033",
+    isGlobal: true,
     name: "Pull Up",
 
     bodyParts: ["Back", "Biceps"],
@@ -264,7 +264,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-034",
+    isGlobal: true,
     name: "Push Up",
 
     bodyParts: ["Chest", "Triceps", "Shoulders"],
@@ -272,7 +272,7 @@ const customExercises = [
     exerciseType: "Strength",
   },
   {
-    exerciseId: "custom-035",
+    isGlobal: true,
     name: "Tricep Push Down",
 
     bodyParts: ["Triceps"],

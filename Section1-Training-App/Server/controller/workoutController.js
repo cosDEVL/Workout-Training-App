@@ -1,29 +1,36 @@
 const catchAsync = require("../utils/catchAsync");
 const Workout = require("../model/workoutSchema");
-const AppError = require("../middleware/AppError");
+const AppError = require("../utils/AppError");
 
-async function getWorkoutAndPopulate(filterObj = {}) {
-  return await Workout.find(filterObj).populate("exerciseList.exerciseRef", [
-    "exerciseId",
-    "name",
-    "bodyParts",
-    "imageUrl",
-  ]);
+async function getWorkoutAndPopulate(req, filterObj = {}) {
+  const userID = req.user.id;
+
+  return await Workout.find({ userID, ...filterObj }).populate(
+    "exerciseList.exerciseRef",
+    ["exerciseId", "name", "bodyParts", "imageUrl"],
+  );
 }
 
-exports.workoutList = catchAsync(async (req, res) => {
-  const workouts = await getWorkoutAndPopulate();
+exports.workoutList = catchAsync(async (req, res, next) => {
+  const workouts = await getWorkoutAndPopulate(req);
+
+  if (workouts.length === 0)
+    return next(new AppError(404, "No workouts found"));
 
   res.status(200).json({
     status: "ok",
     request: `${req.method} ${req.baseUrl}`,
     message: "All workouts fetched successfully",
+    results: workouts.length,
     data: workouts,
   });
 });
 
-exports.workoutDetails = catchAsync(async (req, res) => {
-  const workout = await getWorkoutAndPopulate({ _id: req.params.id });
+exports.workoutDetails = catchAsync(async (req, res, next) => {
+  const workout = await getWorkoutAndPopulate(req, { _id: req.params.id });
+
+  if (workout.length === 0)
+    return next(new AppError(404, "Requested workout not available"));
 
   res.status(200).json({
     status: "ok",
@@ -34,7 +41,14 @@ exports.workoutDetails = catchAsync(async (req, res) => {
 });
 
 exports.addNewWorkout = catchAsync(async (req, res) => {
-  const newWorkout = await Workout.create(req.body);
+  const userID = req.user.id;
+  const { workoutName, exerciseList } = req.body;
+
+  const newWorkout = await Workout.create({
+    userID,
+    workoutName,
+    exerciseList,
+  });
 
   res.status(200).json({
     status: "ok",
@@ -45,7 +59,9 @@ exports.addNewWorkout = catchAsync(async (req, res) => {
 });
 
 exports.deleteAllWorkouts = catchAsync(async (req, res) => {
-  await Workout.deleteMany();
+  const userID = req.user.id;
+
+  await Workout.deleteMany({ userID });
 
   res.status(200).json({
     status: "ok",
@@ -55,7 +71,9 @@ exports.deleteAllWorkouts = catchAsync(async (req, res) => {
 });
 
 exports.deleteWorkout = catchAsync(async (req, res) => {
-  await Workout.findOneAndDelete({ _id: req.params.id });
+  const userID = req.user.id;
+
+  await Workout.findOneAndDelete({ userID, _id: req.params.id });
 
   res.status(200).json({
     status: "ok",
@@ -65,9 +83,16 @@ exports.deleteWorkout = catchAsync(async (req, res) => {
 });
 
 exports.updateWorkout = catchAsync(async (req, res, next) => {
+  const userID = req.user.id;
+
+  const { workoutName, exerciseList } = req.body;
+
   const workoutUpdated = await Workout.findOneAndUpdate(
-    { _id: req.params.id },
-    req.body,
+    { userID, _id: req.params.id },
+    {
+      workoutName,
+      exerciseList,
+    },
     {
       returnDocument: "after",
     },

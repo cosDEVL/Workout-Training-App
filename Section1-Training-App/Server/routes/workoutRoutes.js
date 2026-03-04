@@ -9,16 +9,17 @@ const {
   updateWorkout,
   deleteWorkout,
 } = require("../controller/workoutController");
+const { fortKnoxBouncer } = require("../middleware/protect");
 
 router
   .route("/")
-  .get(workoutList)
-  .post(addNewWorkout)
-  .delete(deleteAllWorkouts);
+  .get(fortKnoxBouncer, workoutList)
+  .post(fortKnoxBouncer, addNewWorkout)
+  .delete(fortKnoxBouncer, deleteAllWorkouts);
 router
   .route("/:id")
-  .get(workoutDetails)
-  .patch(updateWorkout)
-  .delete(deleteWorkout);
+  .get(fortKnoxBouncer, workoutDetails)
+  .patch(fortKnoxBouncer, updateWorkout)
+  .delete(fortKnoxBouncer, deleteWorkout);
 
 module.exports = router;

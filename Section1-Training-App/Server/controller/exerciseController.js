@@ -59,7 +59,7 @@ exports.addNewExercise = catchAsync(async (req, res) => {
     exerciseType,
   });
 
-  res.status(200).json({
+  res.status(201).json({
     status: "ok",
     request: `${req.method} ${req.baseUrl}`,
     message: "Data created successfully",
@@ -73,6 +73,7 @@ exports.exerciseDetails = catchAsync(async (req, res, next) => {
 
   const data = await Exercise.findOne({
     _id,
+    isActive: true,
     $or: [{ userID, isGlobal: false }, { isGlobal: true }],
   });
 

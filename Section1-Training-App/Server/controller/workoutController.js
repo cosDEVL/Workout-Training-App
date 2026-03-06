@@ -14,9 +14,6 @@ async function getWorkoutAndPopulate(req, filterObj = {}) {
 exports.workoutList = catchAsync(async (req, res, next) => {
   const workouts = await getWorkoutAndPopulate(req);
 
-  if (workouts.length === 0)
-    return next(new AppError(404, "No workouts found"));
-
   res.status(200).json({
     status: "ok",
     request: `${req.method} ${req.baseUrl}`,
@@ -50,7 +47,7 @@ exports.addNewWorkout = catchAsync(async (req, res) => {
     exerciseList,
   });
 
-  res.status(200).json({
+  res.status(201).json({
     status: "ok",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout created successfully",
@@ -102,7 +99,7 @@ exports.updateWorkout = catchAsync(async (req, res, next) => {
     return next(new AppError(404, "No workout available with that ID"));
 
   res.status(200).json({
-    status: "Warning",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout updated successfully",
     data: workoutUpdated,

@@ -1,16 +1,25 @@
-import { useCallback, useEffect, useState } from "react";
-import Navbar from "../components/NavBar-Components/Navbar";
-import DisplayArea from "../components/DisplayArea";
-import ExerciseForm from "../components/CreateWorkout-components/ExerciseForm";
+import { useCallback, useContext, useEffect, useState } from "react";
+import Navbar from "../../components/NavBar-Components/Navbar";
+import DisplayArea from "../../components/DisplayArea";
+import ExerciseForm from "../../components/CreateWorkout-components/ExerciseForm";
 
 import "./manageWorkout.css";
 
 import { useLocation, useNavigate, useParams } from "react-router";
-import AddedExerciseList from "../components/CreateWorkout-components/AddedExerciseList";
+import AddedExerciseList from "../../components/CreateWorkout-components/AddedExerciseList";
+import { AuthContext } from "../../AuthContext";
 
 export default function ManageWorkout({ editMode = false }) {
   const apiUrl = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
+
+  const authContext = useContext(AuthContext);
+  const authState =
+    authContext.state.isAuthenticated && authContext.state.token ? true : false;
+
+  useEffect(() => {
+    if (!authState) navigate("/");
+  }, [authState, navigate]);
 
   const { workoutID } = useParams();
   const { state } = useLocation();
@@ -32,7 +41,12 @@ export default function ManageWorkout({ editMode = false }) {
   // useCallback to store function reference between each re-render
   const fetchWorkout = useCallback(async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/v1/workouts/${workoutID}`);
+      const response = await fetch(`${apiUrl}/api/v1/workouts/${workoutID}`, {
+        headers: {
+          Authorization: `Bearer ${authContext.state.token}`,
+        },
+        credentials: "include",
+      });
       const json = await response.json();
 
       return json.data;
@@ -40,7 +54,7 @@ export default function ManageWorkout({ editMode = false }) {
       console.log(error);
       navigate("/workout-list");
     }
-  }, [apiUrl, workoutID, navigate]);
+  }, [apiUrl, workoutID, navigate, authContext.state.token]);
 
   // useEffect to execute fetchWorkout and setting initial data if needed
   useEffect(() => {
@@ -66,9 +80,11 @@ export default function ManageWorkout({ editMode = false }) {
     await fetch(url, {
       method,
       headers: {
+        Authorization: `Bearer ${authContext.state.token}`,
         "Content-Type": "application/json",
       },
       body,
+      credentials: "include",
     });
   }
 

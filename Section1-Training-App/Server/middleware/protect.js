@@ -35,7 +35,6 @@ exports.standardBouncer = catchAsync(async (req, res, next) => {
 
 exports.fortKnoxBouncer = catchAsync(async (req, res, next) => {
   // Recupero e parsing di JWT token e randomString Token
-
   const jsonToken = req.cookies.jwt;
   const headerAuth = req.headers.authorization;
   let headerToken;

@@ -1,23 +1,38 @@
-import { useState, useEffect } from "react";
-import Navbar from "../components/NavBar-Components/Navbar";
-import DisplayArea from "../components/DisplayArea";
+import { useState, useEffect, useContext } from "react";
+import Navbar from "../../components/NavBar-Components/Navbar";
+import DisplayArea from "../../components/DisplayArea";
 import { useNavigate } from "react-router";
 
-import WorkoutTab from "../components/WorkoutList-Components/WorkoutTab";
+import WorkoutTab from "../../components/WorkoutList-Components/WorkoutTab";
 import "./workoutList.css";
+import { AuthContext } from "../../AuthContext";
 
 export default function WorkoutList() {
   const apiUrl = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
+
+  const authContext = useContext(AuthContext);
+  const authState =
+    authContext.state.isAuthenticated && authContext.state.token ? true : false;
+
+  useEffect(() => {
+    if (!authState) navigate("/");
+  }, [authState, navigate]);
 
   const [workoutList, setWorkoutList] = useState([]);
 
   useEffect(() => {
     async function fetchWorkout() {
       try {
-        const response = await fetch(`${apiUrl}/api/v1/workouts`);
+        const response = await fetch(`${apiUrl}/api/v1/workouts`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authContext.state.token}`,
+          },
+          credentials: "include",
+        });
         const json = await response.json();
-
+        console.log(response);
         setWorkoutList(json.data);
       } catch (error) {
         console.log(error);
@@ -25,7 +40,7 @@ export default function WorkoutList() {
     }
 
     fetchWorkout();
-  }, [apiUrl]);
+  }, [apiUrl, authContext.state.token]);
 
   function newWorkout() {
     navigate("/create-workout");

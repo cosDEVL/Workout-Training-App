@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ToggleCategory from "./ToggleCategory";
 
 import "./selectExercise.css";
+import { useNavigate } from "react-router";
+import { AuthContext } from "../../AuthContext";
 
 const BODY_PARTS = [
   "FullBody",
@@ -41,6 +43,8 @@ const EXERCISE_TYPES = [
 export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const authContext = useContext(AuthContext);
+
   const [exerciseList, setExerciseList] = useState([]);
 
   const [queryName, setQueryName] = useState("");
@@ -67,7 +71,13 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
         if (queryExerciseTypes.length > 0)
           url.searchParams.append("exerciseType", queryExerciseTypes.join(","));
 
-        const res = await fetch(url.toString(), { signal: controller.signal });
+        const res = await fetch(url.toString(), {
+          headers: {
+            Authorization: `Bearer ${authContext.state.token}`,
+          },
+          credentials: "include",
+          signal: controller.signal,
+        });
 
         const results = await res.json();
         setExerciseList(results.data);
@@ -80,7 +90,14 @@ export default function SelectExercise({ onHandleSelect, onHandleCloseMenu }) {
       controller.abort();
       clearTimeout(waitFetch);
     };
-  }, [queryName, queryBodyParts, queryEquipments, queryExerciseTypes, apiUrl]);
+  }, [
+    queryName,
+    queryBodyParts,
+    queryEquipments,
+    queryExerciseTypes,
+    apiUrl,
+    authContext.state.token,
+  ]);
 
   function handleToggleCategory(setQuery, categoryName) {
     setQuery((prev) => {

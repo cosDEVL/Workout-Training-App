@@ -1,15 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
-import Navbar from "../components/NavBar-Components/Navbar";
-import DisplayArea from "../components/DisplayArea";
-import Exercise from "../components/CreateWorkout-components/Exercise";
+import Navbar from "../../components/NavBar-Components/Navbar";
+import DisplayArea from "../../components/DisplayArea";
+import Exercise from "../../components/CreateWorkout-components/Exercise";
 
 import "./workoutDetails.css";
-import ManageButtons from "../components/common/ManageButtons";
+import ManageButtons from "../../components/common/ManageButtons";
+import { AuthContext } from "../../AuthContext";
 
 export default function WorkoutDetails() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+
+  const authContext = useContext(AuthContext);
+  const authState =
+    authContext.state.isAuthenticated && authContext.state.token ? true : false;
+
+  useEffect(() => {
+    if (!authState) navigate("/");
+  }, [authState, navigate]);
+
   const { state } = useLocation();
   const { workoutID } = useParams();
 

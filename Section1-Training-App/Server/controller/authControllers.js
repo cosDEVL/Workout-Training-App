@@ -1,6 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/AppError");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../model/userSchema");
 const transport = require("../utils/mailTransporter");
 
@@ -44,6 +45,7 @@ const createSendToken = (user, req, res, statusCode, message = "") => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  console.log(req.body);
   const { username, email, password, confirmPassword } = req.body;
 
   // 1. Si crea il documento dell'utente
@@ -118,7 +120,7 @@ exports.updateSelf = catchAsync(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user.id,
     { username, email },
-    { new: true, runValidators: true },
+    { returnDocument: "after", runValidators: true },
   );
 
   res.status(200).json({

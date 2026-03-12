@@ -183,8 +183,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     await transport.sendMail({
       from: "server@email.test",
       to: `${email}`,
-      subject: "Reset Password",
-      text: `Reset Password Token: ${resetToken}`,
+      subject: "Reset Password Link",
+      text: `${process.env.CLIENT_URL}/reset-password/${resetToken}`,
     });
     res.status(200).json({
       status: "success",

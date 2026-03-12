@@ -1,0 +1,51 @@
+.user-form {
+  max-width: 500px;
+  margin: 0 1rem;
+
+  h2 {
+    text-align: center;
+  }
+
+  form {
+    margin-top: 1.5rem;
+
+    button {
+      cursor: pointer;
+      display: block;
+      min-width: 30%;
+      margin: 1rem auto 0;
+      padding: 0.25rem;
+      font-size: 1.25rem;
+      padding: 0.25rem;
+      background-color: var(--primary-800);
+      color: var(--text-100);
+      border: none;
+      border-radius: 10px;
+    }
+
+    button:hover {
+      background-color: var(--primary-300);
+      color: var(--text-800);
+    }
+  }
+
+  span.nav-span {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    a {
+      color: var(--text-800);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .user-form {
+    width: 400px !important;
+  }
+}

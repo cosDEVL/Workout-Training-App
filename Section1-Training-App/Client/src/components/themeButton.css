@@ -1,0 +1,52 @@
+@import "../styles/custom.css";
+
+.theme-button {
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--background-800);
+  color: var(--primary-100);
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--primary-500);
+  border-radius: 20px;
+
+  transition: all 0.25s;
+
+  * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.theme-button.dark svg:first-of-type {
+  color: var(--primary-800) !important;
+}
+
+.theme-button.light svg:last-of-type {
+  color: var(--primary-900) !important;
+}
+
+.theme-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 25px;
+
+  background-color: var(--primary-100);
+  border-radius: 15px;
+  transition: all 0.25s;
+}
+
+.theme-button.dark::before {
+  left: 0.35rem;
+}
+
+.theme-button.light::before {
+  left: 2.55rem;
+}

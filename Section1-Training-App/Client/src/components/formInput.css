@@ -1,0 +1,71 @@
+@import "../styles/custom.css";
+
+div.input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  label,
+  input {
+    font-size: 1.25rem;
+    cursor: text;
+  }
+
+  label {
+    user-select: none;
+    position: relative;
+    top: -2.25rem;
+    left: 1rem;
+    color: var(--text-900);
+    transition: all 0.25s;
+
+    text-transform: capitalize;
+  }
+
+  label.input-present {
+    transform: translateY(-2.25rem);
+
+    cursor: default;
+  }
+
+  input {
+    outline: none;
+    padding: 0.25rem 1rem;
+    margin-top: 1rem;
+
+    border-radius: 10px;
+    border: none;
+
+    background-color: var(--primary-100);
+    color: var(--text-900);
+
+    transition: border 0.5s;
+  }
+
+  input:focus {
+    background-color: var(--primary-900);
+    color: var(--text-100);
+  }
+
+  input:focus + label {
+    transform: translateY(-2.25rem);
+
+    cursor: default;
+  }
+
+  button.show-password {
+    position: absolute;
+    right: 0;
+    min-width: 40px;
+    background-color: #00000000;
+    color: var(--primary-500);
+  }
+
+  button.show-password:hover {
+    color: var(--primary-900);
+  }
+}
+
+div.input.error input {
+  border: 1px solid #a3293d;
+}

@@ -1,36 +1,31 @@
-import React, { useContext } from "react";
-
-import NavButtons from "../components/NavButtons";
 import "./homepage.css";
-import { AuthContext } from "../AuthContext";
+import React, { useContext } from "react";
+import Navbar from "../components/Navbar";
+import { AuthContext } from "../contextAPI/AuthContext";
+import StateBasedNavLinks from "../components/StateBasedNavLinks";
 
 export default function Homepage() {
-  const authContext = useContext(AuthContext);
-  const authState =
-    authContext.state.isAuthenticated && authContext.state.token ? true : false;
+  const { state, dispatch } = useContext(AuthContext);
 
   return (
-    <div className="homepage">
-      <header>
-        <h1>Training App</h1>
-      </header>
-      <div className="nav-buttons">
-        {authState ? (
-          <>
-            <NavButtons path={"/workout-list"} text={"Workout List"} />
-            <NavButtons
-              path={"/create-workout"}
-              text={"Create a new Workout"}
-            />
-            <NavButtons path={"/user"} text={"Profile"} />
-          </>
-        ) : (
-          <>
-            <NavButtons path={"/login"} text={"Login"} />
-            <NavButtons path={"/signup"} text={"Signup"} />
-          </>
-        )}
+    <>
+      <Navbar />
+      <div className="homepage main window">
+        <div className="presentation">
+          <h1>
+            Welcome to <span className="logo">SyncFit</span>
+          </h1>
+          <h3>Your gym flow, synchronized.</h3>
+          <p>
+            A minimal, intuitive app to log your gym sessions. Create tailored
+            workout plans, record your performance on the go, and never lose
+            track of a single set.
+          </p>
+        </div>
+        <div className="nav-menu">
+          <StateBasedNavLinks />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

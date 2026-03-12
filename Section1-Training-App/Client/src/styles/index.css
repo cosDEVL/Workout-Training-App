@@ -1,0 +1,91 @@
+@import "./custom.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Gestione più semplice di padding/bordi */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Noto Sans Kaithi", Verdana, Geneva, Tahoma, sans-serif;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit; /* Eredita font dal contesto */
+}
+
+body {
+  background-color: var(--background-100);
+  color: var(--text-800);
+  font-family: "Noto Sans Kaithi";
+  font-weight: 400;
+
+  width: 100dvw;
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Noto Sans Kaithi";
+  font-weight: 700;
+}
+
+html {
+  font-size: 100%;
+} /* 16px */
+
+h1 {
+  font-size: 3.21rem; /* 67.36px */
+}
+
+h2 {
+  font-size: 2.158rem; /* 50.56px */
+}
+
+h3 {
+  font-size: 1.369rem; /* 37.92px */
+}
+
+h4 {
+  font-size: 1.477rem; /* 28.48px */
+}
+
+h5 {
+  font-size: 1.233rem; /* 21.28px */
+}
+
+small {
+  font-size: 0.75rem; /* 12px */
+}
+
+span.logo {
+  font-family: "Michroma";
+}
+
+div.main {
+  position: relative;
+  top: 3rem;
+  left: 0;
+  width: 1400px;
+  margin: 2rem auto;
+}
+
+div.window {
+  position: relative;
+  background-color: var(--background-200);
+  border: 1px solid var(--primary-500);
+  border-radius: 1rem;
+
+  padding: 2rem;
+
+  box-shadow: var(--primary-200) 0px 0px 20px 5px;
+}

@@ -1,0 +1,83 @@
+@import "../styles/custom.css";
+
+.toast-message {
+  background-color: var(--background-200);
+  border-radius: 1rem;
+
+  padding: 1rem 0;
+  width: 400px;
+  max-height: 180px;
+
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform-origin: center;
+  transform: translateX(-50%) scale(0);
+
+  transition: all 0.25s;
+
+  button {
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: none;
+
+    background-color: #00000000;
+    color: var(--text-950);
+  }
+
+  button:hover {
+    color: var(--error-message-500);
+  }
+
+  h5 {
+    width: 100%;
+    padding: 0 1rem;
+    margin-bottom: 0.5rem;
+    color: #e2e4e9;
+    text-transform: capitalize;
+  }
+
+  p {
+    padding: 1rem;
+    padding-top: 0.5rem;
+  }
+}
+
+.toast-message.open {
+  transform-origin: center;
+  transform: translateX(-50%) scale(1);
+}
+
+.toast-message.ok {
+  box-shadow: var(--ok-message-400) 0px 0px 20px 5px;
+  border: 1px solid var(--ok-message-600);
+
+  h5 {
+    background-color: #3dc23d;
+    color: #16181d;
+  }
+}
+
+.toast-message.warning {
+  box-shadow: var(--warning-message-200) 0px 0px 20px 5px;
+  border: 1px solid var(--warning-message-600);
+
+  h5 {
+    background-color: #cd8732;
+    color: #16181d;
+  }
+}
+.toast-message.error {
+  box-shadow: var(--error-message-200) 0px 0px 20px 5px;
+  border: 1px solid var(--error-message-600);
+
+  h5 {
+    background-color: #52141f;
+  }
+}

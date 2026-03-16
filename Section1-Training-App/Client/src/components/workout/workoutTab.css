@@ -1,0 +1,61 @@
+@import "../../styles/custom.css";
+
+.workout-tab {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  width: 300px;
+  height: 165px;
+  padding: 1rem;
+  background-color: var(--background-100);
+  border: 1px solid #00000000;
+  border-radius: 15px;
+
+  transform: scale(0.95);
+  transition: all 0.25s;
+
+  span {
+    display: block;
+  }
+
+  span.name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  span.num-exercises {
+    font-size: 1.25rem;
+  }
+
+  span.date-creation {
+    margin-top: 2.5rem;
+  }
+}
+
+.workout-tab.add-workout-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    display: block;
+    color: var(--text-500);
+    font-size: 1.25rem;
+  }
+}
+
+.workout-tab.selected {
+  border: 1px solid var(--primary-600);
+  box-shadow: inset 0 0 10px 0 var(--primary-600);
+  transform: scale(1);
+}
+
+.workout-tab:active {
+  transform: scale(0.9);
+}
+
+.workout-tab:hover {
+  box-shadow: inset 0 0 10px 0 var(--primary-600);
+}

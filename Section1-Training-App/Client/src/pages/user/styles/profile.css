@@ -4,6 +4,10 @@
   max-width: 500px;
   margin: 0 1rem;
 
+  h2 {
+    text-align: center;
+  }
+
   .details {
     .image {
       position: relative;
@@ -77,6 +81,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    gap: 1rem;
     align-items: center;
 
     margin: 1rem 0 2rem;
@@ -129,5 +134,29 @@
 
   button:active {
     scale: 0.95;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile {
+    max-width: 400px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  button {
+    width: 120px !important;
+  }
+
+  button.delete-account {
+    width: 200px !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile {
+    max-width: 90%;
   }
 }

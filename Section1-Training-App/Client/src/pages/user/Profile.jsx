@@ -88,13 +88,10 @@ export default function Profile() {
     <>
       <Navbar />
       <div className="profile main window">
+        <h2>
+          <span className="logo">SyncFit</span> Profile
+        </h2>
         <div className="details">
-          <div className="image">
-            <img
-              src="https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80"
-              alt="profile image"
-            />
-          </div>
           <div className="info">
             <section>
               <h3>Username</h3>

@@ -1,7 +1,7 @@
 import "./styles/userForm.css";
 import Navbar from "../../components/Navbar";
 import { useContext, useState } from "react";
-
+import Cookies from "js-cookie";
 import FormInput from "../../components/FormInput";
 import { checkEmail, checkPassword } from "../../utils/checkFormInputs";
 import { myFetch } from "../../utils/myFetch";
@@ -62,11 +62,9 @@ export default function Login() {
         }),
       });
 
-      const cookieToken = document.cookie.startsWith("accessToken")
-        ? document.cookie.split("=")[1]
-        : null;
+      const cookieToken = Cookies.get("accessToken");
 
-      if (res?.status === "success" && cookieToken) {
+      if (res.status === "success" && cookieToken) {
         toastDispatch({
           type: "ok",
           payload: {
@@ -79,9 +77,10 @@ export default function Login() {
         });
         navigate("/profile");
       } else {
-        throw Error();
+        throw Error("ciao");
       }
     } catch (error) {
+      console.log(error);
       toastDispatch({
         type: "error",
         payload: {

@@ -24,6 +24,7 @@ const createSendToken = (user, req, res, statusCode, message = "") => {
     ),
     httpOnly: true,
     secure: true,
+    sameSite: "none",
   };
 
   // if (process.env.NODE_ENV === "production") {

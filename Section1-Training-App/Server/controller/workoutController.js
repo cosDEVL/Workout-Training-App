@@ -15,7 +15,7 @@ exports.workoutList = catchAsync(async (req, res, next) => {
   const workouts = await getWorkoutAndPopulate(req);
 
   res.status(200).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "All workouts fetched successfully",
     results: workouts.length,
@@ -30,7 +30,7 @@ exports.workoutDetails = catchAsync(async (req, res, next) => {
     return next(new AppError(404, "Requested workout not available"));
 
   res.status(200).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout fetched successfully",
     data: workout[0],
@@ -48,7 +48,7 @@ exports.addNewWorkout = catchAsync(async (req, res) => {
   });
 
   res.status(201).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout created successfully",
     data: newWorkout,
@@ -61,7 +61,7 @@ exports.deleteAllWorkouts = catchAsync(async (req, res) => {
   await Workout.deleteMany({ userID });
 
   res.status(200).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "All workouts deleted successfully",
   });
@@ -73,7 +73,7 @@ exports.deleteWorkout = catchAsync(async (req, res) => {
   await Workout.findOneAndDelete({ userID, _id: req.params.id });
 
   res.status(200).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     message: "Workout deleted successfully",
   });

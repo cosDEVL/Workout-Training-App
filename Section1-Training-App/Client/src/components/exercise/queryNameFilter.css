@@ -1,0 +1,78 @@
+@import "../../styles/custom.css";
+
+.filter-query {
+  position: relative;
+
+  button {
+    cursor: pointer;
+    margin-top: 16px;
+    padding: 0.5rem;
+    background-color: var(--primary-100);
+    color: var(--text-900);
+    border-radius: 10px;
+    border: none;
+  }
+
+  button.toggle-filter-menu.open {
+    background-color: var(--primary-900);
+    color: var(--text-50);
+  }
+
+  .filter-menu {
+    position: absolute;
+    top: 4.5rem;
+    left: -22.7rem;
+    width: 400px;
+    padding: 1rem;
+    background-color: var(--primary-900);
+
+    .category {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      p {
+        width: 100%;
+        color: var(--text-50);
+        font-weight: 600;
+        font-size: 1.15rem;
+        text-align: center;
+        padding-bottom: 0.25rem;
+        border-bottom: 1px solid var(--primary-500);
+        margin-bottom: 0.5rem;
+      }
+
+      label {
+        cursor: pointer;
+        user-select: none;
+        display: block;
+        background-color: var(--primary-100);
+        border-radius: 10px;
+
+        padding: 0.5rem 0.5rem;
+      }
+
+      label.checked {
+        background-color: var(--primary-500);
+      }
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .filter-menu::before {
+    content: "";
+    position: absolute;
+    top: -0.5rem;
+    right: 0.52rem;
+    border-top: 20px solid var(--primary-900);
+    border-bottom: none;
+    border-left: none;
+    border-right: 20px solid transparent;
+
+    transform: rotate(45deg);
+  }
+}

@@ -14,6 +14,10 @@ import { ToastContext } from "./contextAPI/ToastContext";
 import ToastMessage from "./components/ToastMessage";
 import UpdateProfile from "./pages/user/UpdateProfile";
 import UpdatePassword from "./pages/user/UpdatePassword";
+import WorkoutMain from "./pages/workout/WorkoutMain";
+import WorkoutCreate from "./pages/workout/WorkoutCreate";
+import WorkoutDetails from "./pages/workout/WorkoutDetails";
+import WorkoutEdit from "./pages/workout/WorkoutEdit";
 
 function App() {
   const initialAuthStatus = document.cookie.includes("accessToken")
@@ -139,22 +143,30 @@ function App() {
                 element={<ResetForgotPassword />}
               />
 
-              {/* <Route
-            path="/workout/main"
-            element={authStatus ? <WorkoutMainPage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/workout/create"
-            element={authStatus ? <WorkoutCreatePage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/workout/details/:workoutID"
-            element={authStatus ? <WorkoutDetailsPage /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/workout/edit/:workoutID"
-            element={authStatus ? <WorkoutEditPage /> : <Navigate to="/login" />}
-          /> */}
+              <Route
+                path="/workout/main"
+                element={
+                  authStatus ? <WorkoutMain /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/workout/create"
+                element={
+                  authStatus ? <WorkoutCreate /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/workout/details/:workoutID"
+                element={
+                  authStatus ? <WorkoutDetails /> : <Navigate to="/login" />
+                }
+              />
+              <Route
+                path="/workout/edit/:workoutID"
+                element={
+                  authStatus ? <WorkoutEdit /> : <Navigate to="/login" />
+                }
+              />
             </Routes>
           </BrowserRouter>
           {toastState.status === true && <ToastMessage />}

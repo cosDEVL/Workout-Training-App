@@ -1,0 +1,237 @@
+@import "../../../styles/custom.css";
+
+.workout-main {
+  height: 88dvh;
+
+  h2 {
+    text-align: center;
+  }
+
+  .container {
+    height: 92%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    .workout-list {
+      /* background-color: red; */
+      width: 71%;
+      height: 100%;
+      padding: 0.5rem;
+
+      overflow-y: scroll;
+
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      gap: 0.5rem;
+      align-items: flex-start;
+      align-content: flex-start;
+    }
+
+    .no-selected-workout {
+      background-color: var(--primary-100);
+      width: 27%;
+      height: 100%;
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        display: block;
+        color: var(--text-500);
+      }
+
+      span.icon {
+        font-size: 2rem;
+      }
+
+      span.tip {
+        font-size: 1rem;
+      }
+    }
+
+    .workout-preview {
+      background-color: var(--primary-100);
+      width: 27%;
+      height: 100%;
+      border-radius: 10px;
+      padding: 1rem;
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--primary-200);
+
+        .workout-manage-btns {
+          display: flex;
+
+          gap: 1rem;
+          button {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 10px;
+            border: 1px solid #00000000;
+            background-color: #00000000;
+            color: var(--primary-900);
+            font-size: 1.15rem;
+
+            transition: all 0.15s;
+          }
+
+          button.close:hover {
+            color: var(--error-message-500);
+          }
+
+          button.edit:hover {
+            color: var(--warning-message-700);
+            border-color: var(--warning-message-400);
+          }
+
+          button.delete:hover {
+            color: var(--error-message-700);
+            border-color: var(--error-message-400);
+          }
+
+          button:active {
+            scale: 0.9;
+          }
+
+          button.edit:active {
+            box-shadow: 0 0 5px 0 var(--warning-message-700);
+            color: var(--warning-message-700);
+            border-color: var(--warning-message-400);
+          }
+
+          button.delete:active {
+            box-shadow: 0 0 5px 0 var(--error-message-700);
+            color: var(--error-message-700);
+            border-color: var(--error-message-400);
+          }
+        }
+      }
+
+      .exercise-list {
+        height: 90%;
+        overflow-y: scroll;
+        scrollbar-gutter: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .workout-main {
+    max-width: 95%;
+
+    .workout-list {
+      width: 60% !important;
+      justify-content: center;
+    }
+
+    .workout-preview,
+    .no-selected-workout {
+      width: 38% !important;
+    }
+  }
+}
+
+@media screen and (max-width: 1170px) {
+  .workout-main {
+    .workout-list {
+      width: 45% !important;
+
+      justify-content: center;
+
+      .workout-tab {
+        width: 100% !important;
+      }
+    }
+
+    .workout-preview,
+    .no-selected-workout {
+      width: 50% !important;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .workout-main {
+    max-width: 95%;
+    padding: 1rem 0.25rem !important;
+
+    .container {
+      display: block;
+      width: 100%;
+
+      .workout-list {
+        width: 100% !important;
+
+        .workout-tab {
+          width: 45% !important;
+        }
+      }
+
+      .workout-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+
+        border: 1px solid var(--primary-300);
+
+        animation: openPreview 0.25s;
+
+        .header {
+          .workout-manage-btns {
+            flex-direction: row;
+            align-items: center;
+            justify-content: end;
+
+            button {
+              width: fit-content !important;
+            }
+          }
+        }
+      }
+
+      .workout-preview.closing {
+        top: 100%;
+        animation: closePreview 0.25s;
+      }
+
+      .no-selected-workout {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 555px) {
+  .workout-main .container .workout-list .workout-tab {
+    width: 100% !important;
+  }
+}
+
+@keyframes openPreview {
+  from {
+    top: 100%;
+  }
+  to {
+    top: 0%;
+  }
+}
+
+@keyframes closePreview {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100%;
+  }
+}

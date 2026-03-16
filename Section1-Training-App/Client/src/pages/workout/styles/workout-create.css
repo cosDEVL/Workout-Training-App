@@ -1,0 +1,91 @@
+@import "../../../styles/custom.css";
+
+.ghost {
+  width: 400px;
+  /* transform: translateX(-100%); */
+}
+
+.workout-create {
+  height: 88dvh;
+  .container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    height: 92%;
+
+    .workout-edit,
+    .exercise-edit,
+    .exercise-list-db {
+      height: 100%;
+    }
+
+    .workout-edit {
+      width: 35% !important;
+
+      form {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        input {
+          display: block;
+          width: 415px;
+        }
+
+        button {
+          cursor: pointer;
+          margin-top: 16px;
+          padding: 0.5rem;
+          background-color: var(--primary-100);
+          color: var(--text-900);
+          border-radius: 10px;
+          border: none;
+        }
+      }
+    }
+
+    .exercise-edit {
+      width: 32%;
+    }
+
+    .exercise-list-db {
+      width: 30%;
+    }
+
+    .exercise-list {
+      background-color: var(--primary-100);
+      border-radius: 10px;
+      padding: 1rem;
+      height: 90%;
+
+      overflow-y: scroll;
+
+      display: flex;
+      flex-direction: column;
+
+      .add-exercise {
+        display: none;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background-color: var(--background-100);
+        color: var(--text-400);
+        border: 1px solid transparent;
+        border-radius: 10px;
+
+        transition: 0.25s;
+      }
+
+      .add-exercise:hover {
+        border-color: var(--primary-500);
+      }
+
+      .add-exercise:active {
+        box-shadow: inset 0 0 5px 0 var(--primary-500);
+        transform: scale(0.99);
+      }
+    }
+  }
+}

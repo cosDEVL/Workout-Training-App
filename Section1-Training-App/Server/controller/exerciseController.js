@@ -2,7 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const Exercise = require("../model/exerciseSchema");
 const AppError = require("../utils/AppError");
 
-exports.exerciseList = catchAsync(async (req, res) => {
+exports.exerciseList = catchAsync(async (req, res, next) => {
   const userID = req.user.id;
 
   const { query } = req;

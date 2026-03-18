@@ -39,6 +39,18 @@ div.exercise-tab {
   align-items: center;
   justify-content: space-between;
 
+  .info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   .manage-btns {
     display: flex;
     flex-direction: column;
@@ -77,11 +89,20 @@ div.exercise-tab {
       box-shadow: 0 0 5px 0 var(--error-message-500);
     }
   }
+  button.drag-drop {
+    padding: 1rem 0.2rem;
+    border-radius: 10px;
+    border: none;
+    background-color: transparent;
+    color: var(--text-400);
+  }
+  button.drag-drop:hover {
+    cursor: grab;
+  }
 }
 
 div.exercise-tab.dragging {
   background-color: var(--primary-600);
-  cursor: grab;
 }
 
 button.exercise-tab {

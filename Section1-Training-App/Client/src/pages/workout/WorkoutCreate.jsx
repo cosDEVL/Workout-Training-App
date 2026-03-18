@@ -1,5 +1,5 @@
 import "./styles/workout-create.css";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import FormInput from "../../components/FormInput";
 import { ToastContext } from "../../contextAPI/ToastContext";
@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DbExerciseList from "../../components/exercise/DbExerciseList";
 import ExerciseTab from "../../components/exercise/ExerciseTab";
+import ExerciseSetsEdit from "../../components/exercise/ExerciseSetsEdit";
 
 export default function WorkoutCreate() {
   const { authState, authDispatch } = useContext(AuthContext);
@@ -21,14 +22,16 @@ export default function WorkoutCreate() {
 
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseList, setExerciseList] = useState([]);
-  const [editExercise, setEditExercise] = useState(null);
+  const [selectedExerciseKey, setSelectedExerciseKey] = useState(null);
+  const editExercise = exerciseList.find(
+    (ex) => ex.uniqueKey === selectedExerciseKey,
+  );
 
   const [dragIndex, setDragIndex] = useState(null);
 
   const dragStart = (e, index) => {
     setDragIndex(index);
     e.dataTransfer.dropEffect = "move";
-    e.target.style.cursor = "grab";
   };
 
   const dragEnter = (e, index) => {
@@ -62,7 +65,7 @@ export default function WorkoutCreate() {
       sets: [],
     };
     setExerciseList((prev) => [...prev, newExerciseObj]);
-    setEditExercise(newExerciseObj);
+    setSelectedExerciseKey(newExerciseObj.uniqueKey);
   };
 
   const handleRemoveExercise = (exercise) => {
@@ -70,7 +73,60 @@ export default function WorkoutCreate() {
       return prevList.filter((ex) => ex.uniqueKey !== exercise.uniqueKey);
     });
 
-    if (editExercise.uniqueKey === exercise.uniqueKey) setEditExercise(null);
+    if (editExercise?.uniqueKey === exercise.uniqueKey)
+      setSelectedExerciseKey(null);
+  };
+
+  const handleAddExerciseSets = () => {
+    setExerciseList((prevList) =>
+      prevList.map((ex) =>
+        ex.uniqueKey === selectedExerciseKey
+          ? {
+              ...ex,
+              sets: [
+                ...ex.sets,
+                { setID: crypto.randomUUID(), reps: "", weight: "" },
+              ],
+            }
+          : ex,
+      ),
+    );
+  };
+
+  const handleRemoveExerciseSets = (setIndex) => {
+    setExerciseList((prevList) =>
+      prevList.map((ex) =>
+        ex.uniqueKey === selectedExerciseKey
+          ? {
+              ...ex,
+              sets: ex.sets.filter((_, idx) => idx !== setIndex),
+            }
+          : ex,
+      ),
+    );
+  };
+
+  const handleSetExerciseSets = (e, exerciseKey, setIndex) => {
+    const fieldName = e.target.name.split("-")[0];
+    const value = e.target.value;
+
+    setExerciseList((prevList) =>
+      prevList.map((ex) =>
+        ex.uniqueKey === exerciseKey
+          ? {
+              ...ex,
+              sets: ex.sets.map((set, idx) =>
+                idx === setIndex
+                  ? {
+                      ...set,
+                      [fieldName]: value,
+                    }
+                  : set,
+              ),
+            }
+          : ex,
+      ),
+    );
   };
 
   return (
@@ -103,15 +159,13 @@ export default function WorkoutCreate() {
                     exerciseName={exercise.name}
                     exerciseBodyParts={exercise.bodyParts}
                     exercise={exercise}
-                    draggable={true}
-                    dragging={dragIndex === i}
                     onDragStart={(e) => dragStart(e, i)}
                     onDragEnter={(e) => dragEnter(e, i)}
                     onDragEnd={dragEnd}
                   >
                     <button
                       className="edit"
-                      onClick={() => setEditExercise(exercise)}
+                      onClick={() => setSelectedExerciseKey(exercise.uniqueKey)}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
@@ -126,8 +180,14 @@ export default function WorkoutCreate() {
             </div>
           </div>
           <div className="exercise-edit">
-            {editExercise ? (
-              <>{editExercise.name}</>
+            {selectedExerciseKey && editExercise ? (
+              <ExerciseSetsEdit
+                exercise={editExercise}
+                setExerciseSets={handleSetExerciseSets}
+                addExerciseSets={handleAddExerciseSets}
+                removeExerciseSets={handleRemoveExerciseSets}
+                removeEditExercise={() => setSelectedExerciseKey(null)}
+              />
             ) : (
               <div className="no-selected-exercise">
                 <span className="icon">

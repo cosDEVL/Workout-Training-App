@@ -1,10 +1,5 @@
 @import "../../../styles/custom.css";
 
-.ghost {
-  width: 400px;
-  /* transform: translateX(-100%); */
-}
-
 .workout-create {
   height: 88dvh;
   .container {

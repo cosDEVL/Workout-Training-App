@@ -8,6 +8,7 @@ export default function FormInput({
   type,
   value,
   handleChange,
+  handleBlur,
   errorTarget = null,
   children,
 }) {
@@ -25,6 +26,7 @@ export default function FormInput({
         id={label}
         value={value}
         onChange={handleChange}
+        onBlur={handleBlur}
         required
       />
       <label htmlFor={label} className={value ? "input-present" : ""}>

@@ -33,7 +33,7 @@ export default function WorkoutMain() {
             Authorization: `Bearer ${authState.token}`,
           },
         });
-        console.log(res);
+
         if (res.status === "success") {
           setWorkoutList(() => [...res.data]);
         }

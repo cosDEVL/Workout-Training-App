@@ -15,9 +15,12 @@ import ToastMessage from "./components/ToastMessage";
 import UpdateProfile from "./pages/user/UpdateProfile";
 import UpdatePassword from "./pages/user/UpdatePassword";
 import WorkoutMain from "./pages/workout/WorkoutMain";
-import WorkoutCreate from "./pages/workout/WorkoutCreate";
+import WorkoutEditor from "./pages/workout/WorkoutEditor";
 import WorkoutDetails from "./pages/workout/WorkoutDetails";
-import WorkoutEdit from "./pages/workout/WorkoutEdit";
+import WorkoutEdit from "./pages/workout/EditWorkout";
+import WorkoutCreate from "./pages/workout/CreateWorkout";
+import CreateWorkout from "./pages/workout/CreateWorkout";
+import EditWorkout from "./pages/workout/EditWorkout";
 
 function App() {
   const initialAuthStatus = document.cookie.includes("accessToken")
@@ -152,7 +155,7 @@ function App() {
               <Route
                 path="/workout/create"
                 element={
-                  authStatus ? <WorkoutCreate /> : <Navigate to="/login" />
+                  authStatus ? <CreateWorkout /> : <Navigate to="/login" />
                 }
               />
               <Route
@@ -164,7 +167,7 @@ function App() {
               <Route
                 path="/workout/edit/:workoutID"
                 element={
-                  authStatus ? <WorkoutEdit /> : <Navigate to="/login" />
+                  authStatus ? <EditWorkout /> : <Navigate to="/login" />
                 }
               />
             </Routes>

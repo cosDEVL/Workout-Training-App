@@ -2,6 +2,10 @@
 
 .set {
   margin: 1rem;
+  padding: 0.5rem;
+  background-color: var(--primary-200);
+  border: 1px solid var(--primary-400);
+  border-radius: 10px;
 
   .inputs {
     display: flex;
@@ -29,11 +33,7 @@
 }
 
 .set .inputs .set-input {
-  background-color: var(--background-200);
-  padding: 0.5rem 0.5rem;
-  border: 1px solid var(--background-500);
   border-radius: 10px;
-  box-shadow: inset 0 0 5px 2px var(--background-400);
   width: 155px;
 
   label {
@@ -51,9 +51,9 @@
     margin: 0rem auto;
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
-    border: 1px solid var(--primary-500);
+    border: 1px solid var(--text-200);
     outline: none;
-    background-color: var(--background-100);
+    background-color: var(--text-100);
     color: var(--text-700);
     font-size: 1.15rem;
     font-weight: 600;

@@ -24,12 +24,10 @@ export default function ExerciseTab({
 
   const mouseDown = () => {
     setIsDraggable(true);
-    console.log("down");
   };
 
   const mouseUp = () => {
     setIsDraggable(false);
-    console.log("up");
   };
 
   const dragEnd = () => {

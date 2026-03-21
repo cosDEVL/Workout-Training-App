@@ -67,7 +67,16 @@ export default function DbExerciseList({
 
         const results = await res.json();
 
-        setExerciseList(results.data);
+        if (results.status === "success") {
+          setExerciseList(results.data);
+        } else {
+          toastDispatch({
+            type: "warning",
+            payload: {
+              message: results.message,
+            },
+          });
+        }
       } catch (error) {
         toastDispatch({
           type: "error",

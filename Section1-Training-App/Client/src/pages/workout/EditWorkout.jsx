@@ -68,6 +68,10 @@ export default function EditWorkout() {
     });
   };
 
+  if (globalLoading || !workoutName) {
+    return null;
+  }
+
   return (
     <>
       <Navbar />

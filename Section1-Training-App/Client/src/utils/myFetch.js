@@ -10,6 +10,7 @@ export const myFetch = async (endpoint, options = {}) => {
   });
 
   const data = await res.json();
+  console.log(data);
 
   if (!res.ok) {
     throw Error(data.message || "Something went wrong!");

@@ -17,7 +17,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ExerciseSets from "../../components/exercise/ExerciseSets";
 import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
-import { catchAsync } from "../../utils/catchAsync";
 
 export default function WorkoutMain() {
   const navigate = useNavigate();

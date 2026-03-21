@@ -18,17 +18,17 @@ export default function WorkoutEditor({ workout, workoutRequest }) {
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
-  const [workoutName, setWorkoutName] = useState("");
-  const [exerciseList, setExerciseList] = useState([]);
+  const [workoutName, setWorkoutName] = useState(workout?.workoutName || "");
+  const [exerciseList, setExerciseList] = useState(workout?.exerciseList || []);
   const [selectedExerciseKey, setSelectedExerciseKey] = useState(null);
   const [openExerciseMenu, setOpenExerciseMenu] = useState(false);
 
-  useEffect(() => {
-    if (workout) {
-      setWorkoutName(workout.workoutName);
-      setExerciseList(workout.exerciseList);
-    }
-  }, [workout]);
+  // useEffect(() => {
+  //   if (workout) {
+  //     setWorkoutName(workout.workoutName);
+  //     setExerciseList(workout.exerciseList);
+  //   }
+  // }, [workout]);
 
   const handleAddExercise = (exercise) => {
     const newExerciseObj = {

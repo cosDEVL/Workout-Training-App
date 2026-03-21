@@ -35,11 +35,10 @@ exports.exerciseList = catchAsync(async (req, res, next) => {
     ],
   });
 
-  if (data.length === 0)
-    return next(new AppError(404, "No exercise available"));
+  if (data.length === 0) return next(new AppError(404, "No exercise found"));
 
   res.status(200).json({
-    status: "ok",
+    status: "success",
     request: `${req.method} ${req.baseUrl}`,
     results: data.length,
     message: "Data fetched successfully",

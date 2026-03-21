@@ -5,16 +5,19 @@ import { NavLink } from "react-router";
 import { myFetch } from "../../utils/myFetch";
 import { checkEmail } from "../../utils/checkFormInputs";
 import { ToastContext } from "../../contextAPI/ToastContext";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
 
   const { toastState, toastDispatch } = useContext(ToastContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkEmail(email)) {
         toastDispatch({
           type: "warning",
@@ -48,6 +51,8 @@ export default function ForgotPassword() {
           message: error.message || "Something went wrong! Try again later...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
 

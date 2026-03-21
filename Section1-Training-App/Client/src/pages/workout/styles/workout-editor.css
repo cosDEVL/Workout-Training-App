@@ -1,7 +1,6 @@
 @import "../../../styles/custom.css";
 
-.workout-create,
-.workout-edit {
+.manage-workout {
   height: 88dvh;
 
   h1 {
@@ -12,30 +11,31 @@
 }
 
 .workout-editor {
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
-  height: 92%;
+  height: 100%;
 
   .workout-edit,
   .exercise-edit,
   .exercise-list-db {
-    height: 100%;
+    height: 100% !important;
   }
 
   .workout-edit {
-    width: 35% !important;
+    width: 33%;
 
     form {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
+
+      margin-bottom: 1rem;
+      gap: 1rem;
 
       input {
-        display: block;
-        width: 415px;
+        width: 100%;
       }
 
       button {
@@ -51,9 +51,11 @@
   }
 
   .exercise-edit {
+    display: block;
     width: 32%;
 
     .no-selected-exercise {
+      display: block;
       height: 100%;
       background-color: var(--primary-100);
       border-radius: 10px;
@@ -77,14 +79,14 @@
   }
 
   .exercise-list-db {
-    width: 30%;
+    width: 33%;
   }
 
   .exercise-list {
     background-color: var(--primary-100);
     border-radius: 10px;
     padding: 1rem;
-    height: 90%;
+    height: 88%;
 
     overflow-y: scroll;
 
@@ -112,5 +114,137 @@
       box-shadow: inset 0 0 5px 0 var(--primary-500);
       transform: scale(0.99);
     }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .manage-workout {
+    width: 95% !important;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .manage-workout {
+    width: 90% !important;
+
+    .workout-editor {
+      justify-content: space-between;
+      gap: 2rem;
+
+      .exercise-edit .no-selected-exercise {
+        display: none;
+      }
+
+      .exercise-edit.close {
+        top: 120%;
+        animation: swipeDown 0.25s;
+      }
+
+      .exercise-edit {
+        display: block;
+        position: absolute;
+
+        top: 4.5rem;
+        left: 0;
+        z-index: 3;
+
+        height: 88% !important;
+
+        animation: swipeUp 0.25s;
+      }
+
+      .workout-edit,
+      .exercise-list-db,
+      .exercise-edit {
+        width: 47.5%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .manage-workout {
+    padding: 1rem !important;
+    width: 95% !important;
+
+    .workout-editor {
+      gap: 1rem;
+      .exercise-edit {
+        left: 0rem;
+      }
+
+      .workout-edit,
+      .exercise-list-db,
+      .exercise-edit {
+        width: 49%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .manage-workout {
+    width: 90% !important;
+    .workout-editor {
+      justify-content: center;
+
+      .workout-edit .exercise-list .add-exercise {
+        display: block;
+      }
+
+      .exercise-list-db {
+        background-color: var(--background-50);
+        border: 1px solid var(--primary-400);
+        border-radius: 10px;
+        padding: 0rem 0.25rem;
+        height: 88% !important;
+        position: absolute;
+
+        top: 4.5rem;
+        z-index: 2;
+
+        animation: swipeUp 0.25s;
+      }
+
+      .exercise-edit,
+      .exercise-list-db {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .exercise-list-db.closed {
+        top: 120%;
+        animation: swipeDown 0.25s;
+      }
+
+      .workout-edit,
+      .exercise-list-db,
+      .exercise-edit {
+        width: 100%;
+      }
+
+      .exercise-list-db,
+      .exercise-edit {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@keyframes swipeUp {
+  from {
+    top: 120%;
+  }
+  to {
+    top: 4.5rem;
+  }
+}
+
+@keyframes swipeDown {
+  from {
+    top: 4.5rem;
+  }
+  to {
+    top: 120%;
   }
 }

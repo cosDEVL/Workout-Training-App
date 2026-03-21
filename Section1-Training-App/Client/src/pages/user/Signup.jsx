@@ -12,11 +12,13 @@ import { useNavigate } from "react-router";
 import { AuthContext } from "../../contextAPI/AuthContext";
 import { myFetch } from "../../utils/myFetch";
 import { ToastContext } from "../../contextAPI/ToastContext";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function Signup() {
   const navigate = useNavigate();
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { authState, authDispatch } = useContext(AuthContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const [data, setData] = useState({
     username: "",
@@ -38,6 +40,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkEmail(data.email)) {
         toastDispatch({
           type: "warning",
@@ -107,6 +110,8 @@ export default function Signup() {
           message: error.message || "Something went wrong! Try again later...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
   return (

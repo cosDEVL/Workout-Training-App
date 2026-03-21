@@ -65,7 +65,8 @@
 @media screen and (max-width: 768px) {
   .homepage {
     flex-direction: column;
-    transform: translateY(10%);
+
+    transform: translateY(0%);
 
     .presentation {
       padding-right: 0;

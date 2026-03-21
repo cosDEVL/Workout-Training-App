@@ -15,7 +15,9 @@ export default function WorkoutEdit({
   workoutStates,
   setWorkoutName,
   setExerciseList,
+  exerciseKey,
   setExerciseKey,
+  openExerciseMenu,
 }) {
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { workoutName, exerciseList, selectedExerciseKey } = workoutStates;
@@ -56,7 +58,7 @@ export default function WorkoutEdit({
   };
 
   return (
-    <div className="workout-edit">
+    <div className={`workout-edit ${exerciseKey ? "editing" : ""}`}>
       <form onSubmit={handleSubmit}>
         <FormInput
           label={"workout-name"}
@@ -70,7 +72,7 @@ export default function WorkoutEdit({
         </button>
       </form>
       <div className="exercise-list custom-scrollbar">
-        <button className="add-exercise">
+        <button className="add-exercise" onClick={openExerciseMenu}>
           <FontAwesomeIcon icon={faPlus} />
         </button>
         {exerciseList &&
@@ -80,6 +82,7 @@ export default function WorkoutEdit({
               exerciseName={exercise.name}
               exerciseBodyParts={exercise.bodyParts}
               exercise={exercise}
+              sets={exercise.sets}
               onDragStart={(e) => dragStart(e, i)}
               onDragEnter={(e) => dragEnter(e, i)}
               onDragEnd={dragEnd}

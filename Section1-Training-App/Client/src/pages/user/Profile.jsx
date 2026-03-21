@@ -5,11 +5,13 @@ import { ToastContext } from "../../contextAPI/ToastContext";
 import { myFetch } from "../../utils/myFetch";
 import { AuthContext } from "../../contextAPI/AuthContext";
 import { useNavigate } from "react-router";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function Profile() {
   const navigate = useNavigate();
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { authState, authDispatch } = useContext(AuthContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -46,42 +48,66 @@ export default function Profile() {
 
   const handleLogout = async () => {
     if (!confirm("Are you sure? Do you want to Delete the account?")) return;
-    await myFetch("/users/logout", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authState.token}`,
-      },
-    });
-    authDispatch({
-      type: "LOGOUT",
-    });
-    toastDispatch({
-      type: "ok",
-      payload: {
-        message: "Logout successful!",
-      },
-    });
+    try {
+      setGlobalLoading(true);
+      await myFetch("/users/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      authDispatch({
+        type: "LOGOUT",
+      });
+      toastDispatch({
+        type: "ok",
+        payload: {
+          message: "Logout successful!",
+        },
+      });
+    } catch (error) {
+      toastDispatch({
+        type: "error",
+        payload: {
+          message: error.message || "Something went wrong!",
+        },
+      });
+    } finally {
+      setGlobalLoading(false);
+    }
   };
 
   const handleDeleteAccount = async () => {
     if (!confirm("Are you sure? Do you want to Logout?")) return;
 
-    await myFetch("/users/delete-self", {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${authState.token}`,
-      },
-    });
+    try {
+      setGlobalLoading(true);
+      await myFetch("/users/delete-self", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
 
-    authDispatch({
-      type: "LOGOUT",
-    });
-    toastDispatch({
-      type: "ok",
-      payload: {
-        message: "Account Deleted!",
-      },
-    });
+      authDispatch({
+        type: "LOGOUT",
+      });
+      toastDispatch({
+        type: "ok",
+        payload: {
+          message: "Account Deleted!",
+        },
+      });
+    } catch (error) {
+      toastDispatch({
+        type: "error",
+        payload: {
+          message: error.message || "Something went wrong!",
+        },
+      });
+    } finally {
+      setGlobalLoading(false);
+    }
   };
 
   return (

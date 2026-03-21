@@ -1,0 +1,77 @@
+@import "../../../styles/custom.css";
+
+.workout-details {
+  max-width: 400px !important;
+
+  height: 88dvh;
+  padding: 1rem !important;
+
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .container {
+    height: 92%;
+    .workout-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      margin-bottom: 1rem;
+
+      h3 {
+        font-size: 1.5rem;
+        text-transform: capitalize;
+      }
+    }
+
+    .exercise-list {
+      height: 90%;
+      padding: 1rem 0.5rem;
+      background-color: var(--background-100);
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      overflow-y: scroll;
+      border-radius: 10px;
+
+      .exercise-tab .exercise-sets {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+
+        border-top: 1px solid var(--primary-300);
+        table {
+          margin: 0 auto;
+          text-align: center;
+          border-collapse: collapse;
+
+          th {
+            padding-bottom: 0.5rem;
+          }
+
+          td {
+            padding-bottom: 0.5rem;
+            padding-top: 0.5rem;
+            border: 1px solid var(--primary-400);
+            border-left: none;
+            border-right: none;
+          }
+
+          thead {
+            th:nth-of-type(1) {
+              width: 50px;
+            }
+            th:nth-of-type(2) {
+              width: 80px;
+            }
+            th:nth-of-type(3) {
+              width: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

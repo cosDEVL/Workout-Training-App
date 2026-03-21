@@ -8,11 +8,13 @@ import { myFetch } from "../../utils/myFetch";
 import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../../contextAPI/AuthContext";
 import { ToastContext } from "../../contextAPI/ToastContext";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { authState, authDispatch } = useContext(AuthContext);
   const { toastState, toastDispatch } = useContext(ToastContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const [data, setData] = useState({
     email: "",
@@ -32,6 +34,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkEmail(data.email)) {
         toastDispatch({
           type: "warning",
@@ -80,13 +83,14 @@ export default function Login() {
         throw Error("ciao");
       }
     } catch (error) {
-      console.log(error);
       toastDispatch({
         type: "error",
         payload: {
           message: error.message || "Something went wrong! Try again later...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
   return (

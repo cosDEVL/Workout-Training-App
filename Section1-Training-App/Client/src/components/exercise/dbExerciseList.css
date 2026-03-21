@@ -6,10 +6,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
 
     input {
-      display: block;
-      width: 350px;
+      width: 100%;
+    }
+
+    button.close-menu {
+      display: none;
+      cursor: pointer;
+      margin-top: 1rem;
+      padding: 0.25rem;
+      background-color: transparent;
+      border: 1px solid var(--error-message-400);
+      border-radius: 5px;
+      color: var(--error-message-400);
+      transition: all 0.25s;
+    }
+
+    button.close-menu:hover {
+      background-color: var(--error-message-400);
+      color: var(--text-900);
     }
   }
 
@@ -17,11 +34,28 @@
     background-color: var(--primary-100);
     border-radius: 10px;
     padding: 1rem;
-    height: 90%;
+    height: 88%;
 
     overflow-y: scroll;
 
     display: flex;
     flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .exercise-list-db {
+    .query-search {
+      margin-bottom: 0.5rem;
+
+      input,
+      button {
+        margin-top: 0.5rem !important;
+      }
+
+      button.close-menu {
+        display: block;
+      }
+    }
   }
 }

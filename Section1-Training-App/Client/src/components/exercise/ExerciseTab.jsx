@@ -8,7 +8,7 @@ export default function ExerciseTab({
   exerciseBodyParts,
   selectable = false,
   exercise,
-  sets,
+  sets = null,
   handleAction,
 
   onDragStart = null,
@@ -38,12 +38,17 @@ export default function ExerciseTab({
   if (selectable) {
     return (
       <button className="exercise-tab" onClick={() => handleAction(exercise)}>
-        <h4 className="exercise-name">{exerciseName}</h4>
-        <div className="group-focus">
-          {exerciseBodyParts.map((part) => (
-            <span key={part}>{part}</span>
-          ))}
+        <div className="info">
+          <h4 className="exercise-name">
+            {sets ? `${sets.length} x ${exerciseName}` : `${exerciseName}`}
+          </h4>
+          <div className="group-focus">
+            {exerciseBodyParts.map((part) => (
+              <span key={part}>{part}</span>
+            ))}
+          </div>
         </div>
+        {children}
       </button>
     );
   } else {

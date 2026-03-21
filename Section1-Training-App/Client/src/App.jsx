@@ -15,12 +15,11 @@ import ToastMessage from "./components/ToastMessage";
 import UpdateProfile from "./pages/user/UpdateProfile";
 import UpdatePassword from "./pages/user/UpdatePassword";
 import WorkoutMain from "./pages/workout/WorkoutMain";
-import WorkoutEditor from "./pages/workout/WorkoutEditor";
-import WorkoutDetails from "./pages/workout/WorkoutDetails";
-import WorkoutEdit from "./pages/workout/EditWorkout";
-import WorkoutCreate from "./pages/workout/CreateWorkout";
+
 import CreateWorkout from "./pages/workout/CreateWorkout";
 import EditWorkout from "./pages/workout/EditWorkout";
+import { GlobalLoadingContext } from "./contextAPI/GlobalLoadingContext";
+import Loading from "./components/Loading";
 
 function App() {
   const initialAuthStatus = document.cookie.includes("accessToken")
@@ -93,6 +92,8 @@ function App() {
     initialToastStatus,
   );
 
+  const [globalLoading, setGlobalLoading] = useState(false);
+
   const [authState, authDispatch] = useReducer(authReducer, initialAuthStatus);
   const authStatus = authState.isAuth && authState.token ? true : false;
 
@@ -114,66 +115,66 @@ function App() {
   return (
     <ThemeContext.Provider value={{ darkMode, toggleTheme }}>
       <ToastContext.Provider value={{ toastState, toastDispatch }}>
-        <AuthContext.Provider value={{ authState, authDispatch }}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Homepage />} />
+        <GlobalLoadingContext.Provider
+          value={{ globalLoading, setGlobalLoading }}
+        >
+          <AuthContext.Provider value={{ authState, authDispatch }}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Homepage />} />
 
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/profile"
-                element={authStatus ? <Profile /> : <Navigate to="/login" />}
-              />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/profile"
+                  element={authStatus ? <Profile /> : <Navigate to="/login" />}
+                />
 
-              <Route
-                path="/profile/update-profile"
-                element={
-                  authStatus ? <UpdateProfile /> : <Navigate to="/login" />
-                }
-              />
+                <Route
+                  path="/profile/update-profile"
+                  element={
+                    authStatus ? <UpdateProfile /> : <Navigate to="/login" />
+                  }
+                />
 
-              <Route
-                path="/profile/update-password"
-                element={
-                  authStatus ? <UpdatePassword /> : <Navigate to="/login" />
-                }
-              />
+                <Route
+                  path="/profile/update-password"
+                  element={
+                    authStatus ? <UpdatePassword /> : <Navigate to="/login" />
+                  }
+                />
 
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route
-                path="/reset-password/:resetToken"
-                element={<ResetForgotPassword />}
-              />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/reset-password/:resetToken"
+                  element={<ResetForgotPassword />}
+                />
 
-              <Route
-                path="/workout/main"
-                element={
-                  authStatus ? <WorkoutMain /> : <Navigate to="/login" />
-                }
-              />
-              <Route
-                path="/workout/create"
-                element={
-                  authStatus ? <CreateWorkout /> : <Navigate to="/login" />
-                }
-              />
-              <Route
-                path="/workout/details/:workoutID"
-                element={
-                  authStatus ? <WorkoutDetails /> : <Navigate to="/login" />
-                }
-              />
-              <Route
-                path="/workout/edit/:workoutID"
-                element={
-                  authStatus ? <EditWorkout /> : <Navigate to="/login" />
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-          {toastState.status === true && <ToastMessage />}
-        </AuthContext.Provider>
+                <Route
+                  path="/workout/main"
+                  element={
+                    authStatus ? <WorkoutMain /> : <Navigate to="/login" />
+                  }
+                />
+                <Route
+                  path="/workout/create"
+                  element={
+                    authStatus ? <CreateWorkout /> : <Navigate to="/login" />
+                  }
+                />
+
+                <Route
+                  path="/workout/edit/:workoutID"
+                  element={
+                    authStatus ? <EditWorkout /> : <Navigate to="/login" />
+                  }
+                />
+              </Routes>
+            </BrowserRouter>
+            {toastState.status && <ToastMessage />}
+            {globalLoading && <Loading global={true} />}
+          </AuthContext.Provider>
+        </GlobalLoadingContext.Provider>
       </ToastContext.Provider>
     </ThemeContext.Provider>
   );

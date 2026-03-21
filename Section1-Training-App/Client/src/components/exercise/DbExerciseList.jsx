@@ -5,11 +5,20 @@ import { ToastContext } from "../../contextAPI/ToastContext";
 import FormInput from "../FormInput";
 import ExerciseTab from "./ExerciseTab";
 import QueryNameFilter from "./QueryNameFilter";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loading from "../Loading";
 
-export default function DbExerciseList({ handleAddExercise }) {
+export default function DbExerciseList({
+  handleAddExercise,
+  menuStatus,
+  closeMenu,
+}) {
   const apiUrl = import.meta.env.VITE_API_URL;
+
   const { authState, authDispatch } = useContext(AuthContext);
   const { toastState, toastDispatch } = useContext(ToastContext);
+  const [localLoading, setLocalLoading] = useState(true);
 
   const [exerciseList, setExerciseList] = useState([]);
 
@@ -38,6 +47,7 @@ export default function DbExerciseList({ handleAddExercise }) {
 
     const getExercises = setTimeout(async () => {
       try {
+        setLocalLoading(true);
         const url = new URL(`${apiUrl}/exercises`);
 
         if (queryName) url.searchParams.append("name", queryName);
@@ -65,6 +75,8 @@ export default function DbExerciseList({ handleAddExercise }) {
             message: error.message || "Something went wrong!",
           },
         });
+      } finally {
+        setLocalLoading(false);
       }
     }, 300);
 
@@ -75,7 +87,7 @@ export default function DbExerciseList({ handleAddExercise }) {
   }, [queryName, apiUrl, authState.token, toastDispatch, queryFilter]);
 
   return (
-    <div className="exercise-list-db">
+    <div className={`exercise-list-db ${!menuStatus ? "closed" : ""}`}>
       <div className="query-search">
         <FormInput
           label={"exercise-name"}
@@ -87,19 +99,28 @@ export default function DbExerciseList({ handleAddExercise }) {
           queryFilter={queryFilter}
           handleToggle={handleToggleCategoryItem}
         />
+        <button className="close-menu" onClick={closeMenu}>
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
       </div>
       <div className="list custom-scrollbar">
-        {exerciseList &&
-          exerciseList.map((exercise) => (
-            <ExerciseTab
-              key={exercise._id}
-              exerciseName={exercise.name}
-              exerciseBodyParts={exercise.bodyParts}
-              selectable={true}
-              exercise={exercise}
-              handleAction={handleAddExercise}
-            />
-          ))}
+        {localLoading ? (
+          <Loading />
+        ) : (
+          <>
+            {exerciseList &&
+              exerciseList.map((exercise) => (
+                <ExerciseTab
+                  key={exercise._id}
+                  exerciseName={exercise.name}
+                  exerciseBodyParts={exercise.bodyParts}
+                  selectable={true}
+                  exercise={exercise}
+                  handleAction={handleAddExercise}
+                />
+              ))}
+          </>
+        )}
       </div>
     </div>
   );

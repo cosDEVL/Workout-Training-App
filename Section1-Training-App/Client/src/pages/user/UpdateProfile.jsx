@@ -6,11 +6,13 @@ import { ToastContext } from "../../contextAPI/ToastContext";
 import { AuthContext } from "../../contextAPI/AuthContext";
 import { myFetch } from "../../utils/myFetch";
 import { checkEmail } from "../../utils/checkFormInputs";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function UpdateProfile() {
   const navigate = useNavigate();
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { authState, authDispatch } = useContext(AuthContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -28,6 +30,7 @@ export default function UpdateProfile() {
   useEffect(() => {
     async function getUserData() {
       try {
+        setGlobalLoading(true);
         const res = await myFetch("/users/userData", {
           method: "GET",
           headers: {
@@ -48,16 +51,19 @@ export default function UpdateProfile() {
             message: error.message || "Something went wrong!",
           },
         });
+      } finally {
+        setGlobalLoading(false);
       }
     }
 
     getUserData();
-  }, [toastDispatch, authState.token]);
+  }, [toastDispatch, authState.token, setGlobalLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkEmail(userData.email)) {
         toastDispatch({
           type: "warning",
@@ -94,6 +100,8 @@ export default function UpdateProfile() {
           message: error.message || "Something went wrong! Try again later...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
 

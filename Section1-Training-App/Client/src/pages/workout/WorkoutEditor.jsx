@@ -10,22 +10,25 @@ import { myFetch } from "../../utils/myFetch";
 import { useNavigate } from "react-router";
 import ExerciseEdit from "../../components/workout/ExerciseEdit";
 import WorkoutEdit from "../../components/workout/WorkoutEdit";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function WorkoutEditor({ workout, workoutRequest }) {
   const navigate = useNavigate();
 
   const { toastState, toastDispatch } = useContext(ToastContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseList, setExerciseList] = useState([]);
   const [selectedExerciseKey, setSelectedExerciseKey] = useState(null);
+  const [openExerciseMenu, setOpenExerciseMenu] = useState(false);
 
   useEffect(() => {
     if (workout) {
       setWorkoutName(workout.workoutName);
       setExerciseList(workout.exerciseList);
     }
-  }, [workout, workout?.workoutName, workout?.exerciseList]);
+  }, [workout]);
 
   const handleAddExercise = (exercise) => {
     const newExerciseObj = {
@@ -39,12 +42,22 @@ export default function WorkoutEditor({ workout, workoutRequest }) {
     };
     setExerciseList((prev) => [...prev, newExerciseObj]);
     setSelectedExerciseKey(newExerciseObj.uniqueKey);
+    setOpenExerciseMenu(false);
+  };
+
+  const handleOpenExerciseMenu = () => {
+    console.log("1");
+    setOpenExerciseMenu(true);
+  };
+  const handleCloseExerciseMenu = () => {
+    setOpenExerciseMenu(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       const workoutObj = JSON.stringify({
         workoutName: workoutName,
         exerciseList: exerciseList.map((ex) => {
@@ -84,6 +97,8 @@ export default function WorkoutEditor({ workout, workoutRequest }) {
           message: error.message || "Something went wrong!",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
@@ -94,7 +109,9 @@ export default function WorkoutEditor({ workout, workoutRequest }) {
         workoutStates={{ workoutName, exerciseList, selectedExerciseKey }}
         setWorkoutName={setWorkoutName}
         setExerciseList={setExerciseList}
+        exerciseKey={selectedExerciseKey}
         setExerciseKey={setSelectedExerciseKey}
+        openExerciseMenu={handleOpenExerciseMenu}
       />
       <ExerciseEdit
         exerciseList={exerciseList}
@@ -102,7 +119,11 @@ export default function WorkoutEditor({ workout, workoutRequest }) {
         exerciseKey={selectedExerciseKey}
         setExerciseKey={setSelectedExerciseKey}
       />
-      <DbExerciseList handleAddExercise={handleAddExercise} />
+      <DbExerciseList
+        handleAddExercise={handleAddExercise}
+        menuStatus={openExerciseMenu}
+        closeMenu={handleCloseExerciseMenu}
+      />
     </div>
   );
 }

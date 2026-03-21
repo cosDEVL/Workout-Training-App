@@ -9,12 +9,14 @@ import {
 import { myFetch } from "../../utils/myFetch";
 import { useNavigate, useParams } from "react-router";
 import { ToastContext } from "../../contextAPI/ToastContext";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function ResetForgotPassword() {
   const navigate = useNavigate();
   const { resetToken } = useParams();
 
   const { toastState, toastDispatch } = useContext(ToastContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const [data, setData] = useState({
     newPassword: "",
@@ -34,6 +36,7 @@ export default function ResetForgotPassword() {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkPassword(data.password)) {
         toastDispatch({
           type: "warning",
@@ -79,6 +82,8 @@ export default function ResetForgotPassword() {
           message: error.message || "Something went wrong! Try again later...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
 

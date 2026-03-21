@@ -9,11 +9,13 @@ import {
   checkPassword,
 } from "../../utils/checkFormInputs";
 import { myFetch } from "../../utils/myFetch";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function UpdatePassword() {
   const navigate = useNavigate();
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { authState, authDispatch } = useContext(AuthContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
   const [data, setData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -33,6 +35,7 @@ export default function UpdatePassword() {
     e.preventDefault();
 
     try {
+      setGlobalLoading(true);
       if (!checkPassword(data.newPassword)) {
         toastDispatch({
           type: "warning",
@@ -90,6 +93,8 @@ export default function UpdatePassword() {
           message: error.message || "Something went wrong...",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
 

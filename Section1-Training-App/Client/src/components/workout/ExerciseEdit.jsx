@@ -8,7 +8,6 @@ export default function ExerciseEdit({
   exerciseKey,
   setExerciseKey,
 }) {
-  console.log(exerciseList);
   const editExercise = exerciseList.find((ex) => ex.uniqueKey === exerciseKey);
 
   const handleAddExerciseSets = () => {
@@ -63,22 +62,32 @@ export default function ExerciseEdit({
     );
   };
 
+  const handleCloseExerciseEdit = () => {
+    if (window.innerWidth <= 1440) {
+      document.querySelector(".exercise-edit").classList.add("close");
+
+      setTimeout(() => {
+        setExerciseKey(null);
+      }, 250);
+    } else setExerciseKey(null);
+  };
+
   return (
-    <div className="exercise-edit">
+    <div className={`exercise-edit ${!exerciseKey ? "close" : ""}`}>
       {exerciseKey && editExercise ? (
         <ExerciseSetsEdit
           exercise={editExercise}
           setExerciseSets={handleSetExerciseSets}
           addExerciseSets={handleAddExerciseSets}
           removeExerciseSets={handleRemoveExerciseSets}
-          removeEditExercise={() => setExerciseKey(null)}
+          removeEditExercise={handleCloseExerciseEdit}
         />
       ) : (
         <div className="no-selected-exercise">
           <span className="icon">
             <FontAwesomeIcon icon={faCircleInfo} />
           </span>
-          <span className="tip">Select a workout to view the preview</span>
+          <span className="tip">Select an exercise to manage sets</span>
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@
 
 .workout-main {
   height: 88dvh;
+  overflow: hidden;
 
   h2 {
     text-align: center;
@@ -56,16 +57,16 @@
 
     .workout-preview {
       background-color: var(--primary-100);
-      width: 27%;
+      width: 28%;
       height: 100%;
       border-radius: 10px;
-      padding: 1rem;
+      padding: 0.5rem;
 
       .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 1rem;
+        padding: 1rem;
         border-bottom: 1px solid var(--primary-200);
 
         .workout-manage-btns {
@@ -117,9 +118,15 @@
       }
 
       .exercise-list {
-        height: 90%;
+        height: 88%;
         overflow-y: scroll;
         scrollbar-gutter: 5px;
+        margin-top: 0.5rem;
+        padding: 0 0.5rem;
+        display: flex;
+        flex-direction: column;
+
+        justify-content: start;
       }
     }
   }

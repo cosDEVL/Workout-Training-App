@@ -15,18 +15,24 @@ import {
   faTrashCan,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import ExerciseSets from "../../components/exercise/ExerciseSets";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
+import { catchAsync } from "../../utils/catchAsync";
 
 export default function WorkoutMain() {
   const navigate = useNavigate();
   const { authState, authDispatch } = useContext(AuthContext);
   const { toastState, toastDispatch } = useContext(ToastContext);
-
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
   const [workoutList, setWorkoutList] = useState([]);
   const [workoutSelected, setWorkoutSelected] = useState(null);
+
+  const [exerciseSelected, setSelectedExercise] = useState(null);
 
   useEffect(() => {
     async function getWorkouts() {
       try {
+        setGlobalLoading(true);
         const res = await myFetch("/workouts", {
           method: "GET",
           headers: {
@@ -44,11 +50,13 @@ export default function WorkoutMain() {
             message: error.message || "Something went wrong!",
           },
         });
+      } finally {
+        setGlobalLoading(false);
       }
     }
 
     getWorkouts();
-  }, [toastDispatch, authState.token]);
+  }, [toastDispatch, authState.token, setGlobalLoading]);
 
   const handleSelectWorkout = (workout) => {
     setWorkoutSelected(workout);
@@ -67,6 +75,7 @@ export default function WorkoutMain() {
   const handleDeleteWorkout = async (workoutID) => {
     if (!confirm("Are you sure do you want to delete the workout?")) return;
     try {
+      setGlobalLoading(true);
       const res = await myFetch(`/workouts/${workoutID}`, {
         method: "DELETE",
         headers: {
@@ -95,8 +104,16 @@ export default function WorkoutMain() {
           message: error.message || "Something went wrong!",
         },
       });
+    } finally {
+      setGlobalLoading(false);
     }
   };
+
+  function toggleSets(exercise) {
+    if (exerciseSelected && exerciseSelected === exercise) {
+      setSelectedExercise(null);
+    } else setSelectedExercise(exercise);
+  }
 
   return (
     <>
@@ -132,10 +149,10 @@ export default function WorkoutMain() {
                   <button
                     className="edit"
                     onClick={() =>
-                      navigate(`/workout/details/${workoutSelected._id}`)
+                      navigate(`/workout/edit/${workoutSelected._id}`)
                     }
                   >
-                    <FontAwesomeIcon icon={faCircleInfo} />
+                    <FontAwesomeIcon icon={faPenToSquare} />
                   </button>
                   <button
                     className="delete"
@@ -155,7 +172,14 @@ export default function WorkoutMain() {
                     exerciseName={exercise.exerciseRef.name}
                     exerciseBodyParts={exercise.exerciseRef.bodyParts}
                     sets={exercise.sets}
-                  ></ExerciseTab>
+                    selectable={true}
+                    exercise={exercise}
+                    handleAction={toggleSets}
+                  >
+                    {exerciseSelected && exerciseSelected === exercise && (
+                      <ExerciseSets sets={exercise.sets} />
+                    )}
+                  </ExerciseTab>
                 ))}
               </div>
             </div>

@@ -17,7 +17,7 @@ export default function SetRow({
   useEffect(() => {
     setLocalReps(set.reps);
     setLocalWeight(set.weight);
-  }, [set.reps, set.weight]);
+  }, [set]);
 
   return (
     <div className="set">

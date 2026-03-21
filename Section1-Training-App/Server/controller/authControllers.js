@@ -46,7 +46,6 @@ const createSendToken = (user, req, res, statusCode, message = "") => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const { username, email, password, confirmPassword } = req.body;
 
   // 1. Si crea il documento dell'utente

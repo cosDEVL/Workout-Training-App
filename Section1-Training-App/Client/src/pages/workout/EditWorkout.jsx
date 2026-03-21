@@ -5,10 +5,12 @@ import { useParams } from "react-router";
 import { ToastContext } from "../../contextAPI/ToastContext";
 import { AuthContext } from "../../contextAPI/AuthContext";
 import { myFetch } from "../../utils/myFetch";
+import { GlobalLoadingContext } from "../../contextAPI/GlobalLoadingContext";
 
 export default function EditWorkout() {
   const { toastState, toastDispatch } = useContext(ToastContext);
   const { authState, authDispatch } = useContext(AuthContext);
+  const { globalLoading, setGlobalLoading } = useContext(GlobalLoadingContext);
 
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseList, setExerciseList] = useState([]);
@@ -16,6 +18,7 @@ export default function EditWorkout() {
 
   useEffect(() => {
     async function getWorkoutData() {
+      setGlobalLoading(true);
       try {
         const res = await myFetch(`/workouts/${workoutID}`, {
           method: "GET",
@@ -30,11 +33,11 @@ export default function EditWorkout() {
           const newExerciseList = data.exerciseList.map((ex) => {
             const { exerciseRef } = ex;
             return {
-              uniqueKey: exerciseRef._id,
+              uniqueKey: crypto.randomUUID(),
               name: exerciseRef.name,
               bodyParts: exerciseRef.bodyParts,
               sets: ex.sets,
-              _id: ex._id,
+              _id: exerciseRef._id,
             };
           });
           setWorkoutName(data.workoutName);
@@ -47,11 +50,13 @@ export default function EditWorkout() {
             message: error.message || "Something went wrong!",
           },
         });
+      } finally {
+        setGlobalLoading(false);
       }
     }
 
     getWorkoutData();
-  }, [authState.token, toastDispatch, workoutID]);
+  }, [authState.token, toastDispatch, workoutID, setGlobalLoading]);
 
   const patchWorkout = async (body) => {
     return await myFetch(`/workouts/${workoutID}`, {
@@ -66,8 +71,7 @@ export default function EditWorkout() {
   return (
     <>
       <Navbar />
-      <div className="workout-edit window main">
-        <h1>Edit Workout</h1>
+      <div className="manage-workout window main">
         <WorkoutEditor
           workout={{ workoutName, exerciseList }}
           workoutRequest={patchWorkout}

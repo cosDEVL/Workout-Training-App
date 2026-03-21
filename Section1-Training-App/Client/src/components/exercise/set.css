@@ -1,8 +1,8 @@
 @import "../../styles/custom.css";
 
 .set {
-  margin: 1rem;
   padding: 0.5rem;
+  margin-bottom: 1rem;
   background-color: var(--primary-200);
   border: 1px solid var(--primary-400);
   border-radius: 10px;
@@ -13,6 +13,7 @@
     justify-content: space-evenly;
 
     button.remove-set {
+      align-self: flex-end;
       cursor: pointer;
       background-color: var(--error-message-500);
       color: var(--text-900);
@@ -20,6 +21,7 @@
       border: 1px solid var(--error-message-200);
 
       transition: all 0.25s;
+      margin-bottom: 0.1rem;
     }
 
     button.remove-set:hover {
@@ -69,5 +71,13 @@
   input:focus {
     background-color: var(--background-800);
     color: var(--text-100);
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .set .inputs .set-input {
+    input {
+      width: 100px;
+    }
   }
 }

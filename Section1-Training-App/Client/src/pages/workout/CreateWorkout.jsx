@@ -21,8 +21,7 @@ export default function CreateWorkout() {
   return (
     <>
       <Navbar />
-      <div className="workout-create window main ">
-        <h1>Create a Workout</h1>
+      <div className="manage-workout window main ">
         <WorkoutEditor workoutRequest={postWorkout} />
       </div>
     </>
